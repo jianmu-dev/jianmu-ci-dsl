@@ -1,8 +1,7 @@
-eb: sso_image_builder_hook
-
 param:
   image_name: jianmudev/private
   image_tag_prefix: jianmu-sso
+  image_tag_suffix: 1.0.0
 
 pipeline:
   name: 构建单点登录docker镜像
@@ -12,7 +11,7 @@ pipeline:
     type: git_clone:1.0.0
     param:
       remote_url: https://gitee.com/letspay/sso.git
-      ref: ${event.gitee_ref}
+      ref: refs/heads/master
   node_build:
     type: nodejs_build:1.0.0-14.16.1
     param:
@@ -23,7 +22,7 @@ pipeline:
       docker_username: ((dockerhub.username))
       docker_password: ((dockerhub.password))
       image_name: ${global.image_name}
-      image_tag: ${global.image_tag_prefix}-${git_clone.git_tag}
+      image_tag: ${global.image_tag_prefix}-${global.image_tag_suffix}
       docker_file: Dockerfile
       docker_build_path: .
       workspace: ${git_clone.git_path}
