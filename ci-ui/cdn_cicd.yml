@@ -1,3 +1,5 @@
+eb: jianmu_ci_ui_cdn_ci_cd_hook
+
 pipeline:
   name: 建木CI前端CDN CI/CD
   ref: jianmu_ci_ui_cdn_cicd
@@ -19,7 +21,7 @@ pipeline:
       qiniu_ak: ((qiniu.AccessKey))
       qiniu_sk: ((qiniu.SecretKey))
       qiniu_zone: z1
-      qiniu_upload_uri_prefix: ${node_build.package_name}/v${node_build.package_version}
+      qiniu_upload_uri_prefix: ${node_build.package_name}/${git_clone.git_tag}
       qiniu_upload_dir: ${git_clone.git_path}/dist
   create_dir:
     type: ssh_cmd:1.0.0
@@ -39,6 +41,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木CI前端CDN更新完成。\\n\\n版本：v${node_build.package_version}"
+      text_content: "建木CI前端CDN更新完成。\\n\\n版本：${git_clone.git_tag}"
       msgtype: "text"
       mentioned_list: "[]"
