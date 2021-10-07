@@ -1,11 +1,30 @@
+eb: ci_server_prod_cicd_hook
+
 param:
   image_name: jianmudev/jianmu-ci-server
-  image_tag: latest
 
 pipeline:
   name: 建木CI服务端生产环境 CI/CD
   ref: jianmu_ci_server_prod_cicd
   description: 建木CI服务端生产环境 CI/CD
+  git_clone:
+    type: git_clone:1.0.0
+    param:
+      remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
+      ref: ${event.gitee_ref}
+      netrc_machine: gitee.com
+      netrc_username: ((gitee.username))
+      netrc_password: ((gitee.password))
+  maven_jib_build:
+    type: maven_build:1.2.0-jdk11
+    param:
+      mvn_action: install
+      workspace: ${git_clone.git_path}
+      image_name: ${global.image_name}
+      image_tag: ${git_clone.git_tag}
+      docker_username: ((dockerhub.username))
+      docker_password: ((dockerhub.password))
+      maven_public_url: https://nexus.jianmu.dev/repository/maven-public/
   deploy_server:
     type: ssh_cmd:1.0.0
     param:
@@ -22,7 +41,7 @@ pipeline:
         &&
         echo source version: $ci_server_version
         &&
-        echo target version: ${global.image_tag}
+        echo target version: ${git_clone.git_tag}
         &&
         docker-compose stop ci-server
         &&
@@ -34,7 +53,7 @@ pipeline:
         &&
         sed -i '/^ci_server_version=/d' .env
         &&
-        echo ci_server_version=${global.image_tag} >> .env
+        echo ci_server_version=${git_clone.git_tag} >> .env
         &&
         docker-compose up -d ci-server
         &&
@@ -48,6 +67,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木CI服务端生产环境更新完成。\\n\\n镜像：${global.image_name}:${global.image_tag}"
+      text_content: "建木CI服务端生产环境更新完成。\\n\\n镜像：${global.image_name}:${git_clone.git_tag}"
       msgtype: "text"
       mentioned_list: "[]"
