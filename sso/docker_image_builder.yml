@@ -1,0 +1,24 @@
+pipeline:
+  name: 构建单点登录docker镜像
+  ref: sso_image_builder
+  description: 构建单点登录docker镜像
+  git_clone:
+    type: git:v1.0
+    param:
+      workspace: sso
+      remote_url: https://gitee.com/letspay/sso.git
+      commit_branch: master
+  node_build:
+    type: node_build:14.16.1-alpine3.13
+    param:
+      workspace: sso
+  image_build:
+    type: image_build:v3.0
+    param:
+      workspace: sso
+      docker_username: ((dockerhub.username))
+      docker_password: ((dockerhub.password))
+      docker_file: Dockerfile
+      image_name: jianmudev/private
+      image_tag: jianmu-sso-1.0.0
+      docker_build_path: .
