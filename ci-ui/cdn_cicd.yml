@@ -8,7 +8,7 @@ pipeline:
     type: git_clone:1.0.0
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-ui.git
-      ref: refs/heads/master
+      ref: ${event.gitee_ref}
   node_build:
     type: nodejs_build:1.0.0-14.16.1
     param:
