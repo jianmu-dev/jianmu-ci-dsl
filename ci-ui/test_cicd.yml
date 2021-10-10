@@ -1,6 +1,5 @@
 param:
   image_name: jianmudev/jianmu-ci-ui
-  image_tag: test
 
 pipeline:
   name: 建木CI前端测试环境 CI/CD
@@ -26,7 +25,7 @@ pipeline:
       docker_username: ((dockerhub.username))
       docker_password: ((dockerhub.password))
       image_name: ${global.image_name}
-      image_tag: ${global.image_tag}
+      image_tag: ${git_clone_ui.git_branch}
       docker_file: Dockerfile
       docker_build_path: .
       workspace: ${git_clone_image.git_path}
@@ -43,17 +42,25 @@ pipeline:
         &&
         cd /root/jianmu-ci
         &&
-        docker tag ${global.image_name}:${global.image_tag} ${global.image_name}:temp
+        source ./.env
         &&
-        docker pull ${global.image_name}:${global.image_tag}
+        echo source version: $web_version
+        &&
+        echo target version: ${git_clone_ui_.git_branch}
         &&
         docker-compose stop web
         &&
         docker-compose rm -vf web
         &&
-        docker-compose up -d web
+        docker rmi ${global.image_name}:$web_version
         &&
-        docker rmi ${global.image_name}:temp
+        cp .env .env.$(date +'%Y-%m-%d_%H:%M:%S')
+        &&
+        sed -i '/^web_version=/d' .env
+        &&
+        echo web_version=${git_clone_ui.git_branch} >> .env
+        &&
+        docker-compose up -d web
         &&
         docker images
         &&
