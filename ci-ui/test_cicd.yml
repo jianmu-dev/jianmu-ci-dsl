@@ -47,7 +47,7 @@ pipeline:
         &&
         echo source version: $web_version
         &&
-        echo target version: ${git_clone_ui_.git_branch}
+        echo target version: ${git_clone_ui.git_branch}
         &&
         docker-compose stop web
         &&
