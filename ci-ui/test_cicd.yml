@@ -1,11 +1,36 @@
 param:
   image_name: jianmudev/jianmu-ci-ui
-  image_tag: latest
+  image_tag: test
 
 pipeline:
   name: 建木CI前端测试环境 CI/CD
   ref: jianmu_ci_ui_test_cicd
   description: 建木CI前端测试环境 CI/CD
+  git_clone_ui:
+    type: git_clone:1.0.1
+    param:
+      remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
+      ref: refs/heads/ui
+  node_build:
+    type: nodejs_build:1.0.0-14.16.1
+    param:
+      workspace: ${git_clone_ui.git_path}/ui
+  git_clone_image:
+    type: git_clone:1.0.1
+    param:
+      remote_url: https://gitee.com/jianmu-dev/jianmu-ui-image.git
+      ref: refs/heads/master
+  image_build:
+    type: docker_image_build:1.0.0
+    param:
+      docker_username: ((dockerhub.username))
+      docker_password: ((dockerhub.password))
+      image_name: ${global.image_name}
+      image_tag: ${global.image_tag}
+      docker_file: Dockerfile
+      docker_build_path: .
+      workspace: ${git_clone_image.git_path}
+      cmd_pre: cp -r ${git_clone_ui.git_path}/ui/dist .
   ssh_cmd:
     type: ssh_cmd:1.0.0
     param:
@@ -40,6 +65,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木CI前端测试环境更新完成。\\n\\n镜像版本：${global.image_name}:${global.image_tag}"
+      text_content: "建木CI前端测试环境更新完成。\\n\\n开发分支：${git_clone_ui.git_branch}"
       msgtype: "text"
       mentioned_list: "[]"
