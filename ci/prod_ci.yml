@@ -46,7 +46,7 @@ workflow:
     targets:
       - git_clone_image
     param:
-      workspace: ${git_clone.git_path}
+      workspace: ${git_clone.git_path}/ui
   git_clone_image:
     type: git_clone:1.0.1
     sources:
@@ -70,7 +70,7 @@ workflow:
       docker_file: Dockerfile
       docker_build_path: .
       workspace: ${git_clone_image.git_path}
-      cmd_pre: cp -r ${git_clone.git_path}/dist .
+      cmd_pre: cp -r ${git_clone.git_path}/ui/dist .
   send_message:
     type: qywx_notice:1.1.0
     sources:
