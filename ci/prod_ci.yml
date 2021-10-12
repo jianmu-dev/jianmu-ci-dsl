@@ -47,6 +47,7 @@ workflow:
       - git_clone_image
     param:
       workspace: ${git_clone.git_path}/ui
+      mirror_registry_url: https://registry.npm.taobao.org
   git_clone_image:
     type: git_clone:1.0.1
     sources:
