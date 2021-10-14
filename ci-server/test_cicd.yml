@@ -10,7 +10,7 @@ pipeline:
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
       # TODO 后续来源为event，筛选指定分支的push
-      ref: refs/heads/1.0.1
+      ref: refs/heads/master
       netrc_machine: gitee.com
       netrc_username: ((gitee.username))
       netrc_password: ((gitee.password))
