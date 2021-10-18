@@ -10,7 +10,7 @@ pipeline:
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
       # TODO 后续来源为event，筛选指定分支的push
-      ref: refs/heads/master
+      ref: refs/heads/1.1.1
   node_build:
     type: nodejs_build:1.0.0-14.16.1
     param:
