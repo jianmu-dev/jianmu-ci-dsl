@@ -1,19 +1,19 @@
 param:
   image_name: jianmudev/private
   image_tag_prefix: jianmu-sso
-  image_tag_suffix: 1.0.0
+  image_tag_suffix: 1.0.1
 
 pipeline:
   name: 构建单点登录docker镜像
   ref: sso_image_builder
   description: 构建单点登录docker镜像
   git_clone:
-    type: git_clone:1.0.0
+    type: git_clone:1.0.1
     param:
       remote_url: https://gitee.com/letspay/sso.git
       ref: refs/heads/master
   node_build:
-    type: nodejs_build:1.0.0-14.16.1
+    type: nodejs_build:1.1.0-14.16.1
     param:
       workspace: ${git_clone.git_path}
   image_build:
