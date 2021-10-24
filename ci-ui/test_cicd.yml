@@ -3,7 +3,6 @@ param:
 
 pipeline:
   name: 建木CI前端测试环境 CI/CD
-  ref: jianmu_ci_ui_test_cicd
   description: 建木CI前端测试环境 CI/CD
   git_clone_ui:
     type: git_clone:1.0.1
