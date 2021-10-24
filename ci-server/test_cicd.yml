@@ -6,7 +6,7 @@ pipeline:
   ref: jianmu_ci_server_test_cicd
   description: 建木CI服务端测试环境 CI/CD
   git_clone:
-    type: git_clone:1.0.0
+    type: git_clone:1.0.1
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
       # TODO 后续来源为event，筛选指定分支的push
