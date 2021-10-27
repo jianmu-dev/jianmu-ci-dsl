@@ -1,4 +1,4 @@
-db: ci_ui_test_ci_cd_hook
+#eb: ci_ui_test_ci_cd_hook
 
 param:
   image_name: jianmudev/jianmu-ci-ui
