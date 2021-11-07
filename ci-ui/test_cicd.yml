@@ -1,7 +1,8 @@
 #eb: ci_ui_test_ci_cd_hook
 
-param:
-  image_name: jianmudev/jianmu-ci-ui
+global:
+  param:
+    image_name: jianmudev/jianmu-ci-ui
 
 pipeline:
   name: 建木CI前端测试环境 CI/CD
