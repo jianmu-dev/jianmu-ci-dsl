@@ -1,0 +1,19 @@
+pipeline:
+  name: 批量导入项目
+  git_clone:
+    type: git_clone:1.1.1
+    param:
+      remote_url: https://gitee.com/jianmu-dev/jianmu-ci-dsl.git
+      ref: refs/heads/test
+      netrc_machine: gitee.com
+      netrc_username: ((gitee.username))
+      netrc_password: ((gitee.password))
+  reconfigure_project:
+    type: reconfigure_project:1.0.0
+    param:
+      ci_url: https://ci.test.jianmu.dev
+      ci_username: ((jianmu_ci.username))
+      ci_password: ((jianmu_ci.password))
+      git_path: ${git_clone.git_path}
+      reconfigure_file_path: reconfigure.yml
+      deletable: false
