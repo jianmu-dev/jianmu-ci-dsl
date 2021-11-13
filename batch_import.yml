@@ -15,5 +15,5 @@ pipeline:
       ci_username: ((jianmu_ci.username))
       ci_password: ((jianmu_ci.password))
       git_path: ${git_clone.git_path}
-      reconfigure_file_path: reconfigure.yml
+      reconfigure_file_path: /reconfigure.yml
       deletable: false
