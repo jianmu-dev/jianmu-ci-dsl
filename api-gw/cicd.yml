@@ -1,0 +1,62 @@
+global:
+  param:
+    image_name: jianmudev/private
+
+pipeline:
+  name: API网关测试环境CI/CD
+  description: API网关测试环境CI/CD
+  git_clone:
+    type: git_clone:1.0.0
+    param:
+      remote_url: https://gitee.com/jianmu-hub/jianmu-api-gateway.git
+      ref: refs/heads/master
+      netrc_machine: gitee.com
+      netrc_username: ((gitee.username))
+      netrc_password: ((gitee.password))
+  node_build:
+    type: nodejs_build:1.0.0-14.16.1
+    param:
+      workspace: ${git_clone.git_path}
+  image_build:
+    type: docker_image_build:1.0.0
+    param:
+      workspace: ${git_clone.git_path}
+      docker_username: ((dockerhub.username))
+      docker_password: ((dockerhub.password))
+      docker_file: Dockerfile
+      image_name: ${global.image_name}
+      image_tag: ${node_build.package_name}-${node_build.package_version}
+      docker_build_path: .
+  deploy_server:
+    type: ssh_cmd:1.0.0
+    param:
+      ssh_ip: 192.168.0.222
+      ssh_private_key: ((jianmu_hub.server_private_key))
+      ssh_cmd: >-
+        docker images
+        &&
+        docker ps
+        &&
+        cd /root/jianmu-hub-deploy/api-gateway
+        &&
+        docker pull ${global.image_name}:${node_build.package_name}-${node_build.package_version}
+        &&
+        docker-compose down --rmi all
+        &&
+        echo version=${node_build.package_version} > .env
+        &&
+        docker-compose up -d
+        &&
+        docker images
+        &&
+        docker ps
+        &&
+        echo done
+  send_message:
+    type: qywx_notice:1.0.0
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_moblie_list: "[]"
+      text_content: "API网关测试环境更新完成。\\n\\n镜像：${global.image_name}:${node_build.package_name}-${node_build.package_version}"
+      msgtype: "text"
+      mentioned_list: "[]"
