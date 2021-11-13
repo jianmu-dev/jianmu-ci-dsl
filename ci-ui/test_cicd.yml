@@ -1,5 +1,3 @@
-#eb: ci_ui_test_ci_cd_hook
-
 global:
   param:
     image_name: jianmudev/jianmu-ci-ui
