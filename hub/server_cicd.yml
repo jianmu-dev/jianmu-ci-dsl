@@ -1,5 +1,3 @@
-# eb: hub_server_test_ci_cd_webhook
-
 trigger:
   type: webhook
   param:

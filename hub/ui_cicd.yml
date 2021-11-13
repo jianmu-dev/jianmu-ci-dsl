@@ -1,5 +1,3 @@
-# eb: jianmu_hub_ui_test_ci_cd_hook
-
 trigger:
   type: webhook
   param:
