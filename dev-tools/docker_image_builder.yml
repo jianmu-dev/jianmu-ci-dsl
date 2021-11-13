@@ -1,0 +1,27 @@
+pipeline:
+  name: 构建dev-tools的docker镜像
+  description: 构建dev-tools的docker镜像
+  git_clone:
+    type: git_clone:1.0.0
+    param:
+      ref: refs/heads/master
+      remote_url: https://gitee.com/jianmu-hub/dev-tools.git
+      netrc_machine: gitee.com
+      netrc_username: ((gitee.username))
+      netrc_password: ((gitee.password))
+  maven_jib:
+    type: maven_build:1.0.0-jdk11
+    param:
+      mvn_action: package
+      workspace: ${git_clone.git_path}
+      image_name: jianmudev/private
+      docker_username: ((dockerhub.username))
+      docker_password: ((dockerhub.password))
+  send_message:
+    type: qywx_notice:1.0.0
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_moblie_list: "[]"
+      text_content: "建木dev-tools测试环境更新完成"
+      msgtype: "text"
+      mentioned_list: "[]"
