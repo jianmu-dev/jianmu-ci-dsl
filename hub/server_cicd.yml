@@ -2,11 +2,11 @@ trigger:
   type: webhook
   param:
     - name: gitee_token
-     type: SECRET
-     exp: $.header.X-Gitee-Token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
     - name: pr_state
-     type: STRING
-     exp: $.body.json.pull_request.state
+      type: STRING
+      exp: $.body.json.pull_request.state
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
