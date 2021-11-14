@@ -9,7 +9,7 @@ trigger:
       exp: $.header.X-Gitee-Event
     - name: git_ref
       type: STRING
-      exp: $.ref
+      exp: $.body.json.ref
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
