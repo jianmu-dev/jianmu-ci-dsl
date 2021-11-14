@@ -4,13 +4,16 @@ trigger:
     - name: gitee_token
       type: SECRET
       exp: $.header.X-Gitee-Token
+    - name: git_ref
+      type: STRING
+      exp: $.ref
     - name: pr_state
       type: STRING
       exp: $.body.json.pull_request.state
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  matcher: (${trigger.pr_state} == "merged")
+  matcher: (${trigger.git_ref} == "refs/heads/test")
 
 pipeline:
   name: 批量导入项目
