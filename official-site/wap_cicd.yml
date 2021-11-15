@@ -10,7 +10,7 @@ pipeline:
       netrc_username: ((gitee.username))
       netrc_password: ((gitee.password))
   node_build:
-    type: nodejs_build:1.2.0-14.16.1
+    type: nodejs_build:1.2.0-16.13.0
     param:
       workspace: ${git_clone.git_path}
   update_resoure:
