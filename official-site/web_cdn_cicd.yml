@@ -1,5 +1,6 @@
 pipeline:
   name: 建木官网web cdn CI/CD
+  ref: official_site_web_cdn_cicd
   description: 建木官网web cdn CI/CD
   git_clone:
     type: git_clone:1.1.1
