@@ -1,6 +1,6 @@
 pipeline:
-  name: 建木官网wap测试环境 CI/CD
-  description: 建木官网wap测试环境 CI/CD
+  name: 建木官网手机端测试环境 CI/CD
+  description: 建木官网手机端测试环境 CI/CD
   git_clone:
     type: git_clone:1.1.1
     param:
@@ -25,6 +25,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木官网wap测试环境更新完成\\n\\n版本：${node_build.package_version}"
+      text_content: "建木官网手机端测试环境更新完成\\n\\n版本：${node_build.package_version}"
       msgtype: "text"
       mentioned_list: "[]"
