@@ -25,7 +25,7 @@ pipeline:
       netrc_machine: gitee.com
       netrc_username: ((gitee.username))
       netrc_password: ((gitee.password))
-  reconfigure_project:
+  sync_project_group:
     type: sync_project_group:1.0.0
     param:
       ci_url: https://ci.test.jianmu.dev
