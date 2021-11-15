@@ -1,0 +1,27 @@
+pipeline:
+  name: 建木官网wap测试环境 CI/CD
+  description: 建木官网wap测试环境 CI/CD
+  git_clone:
+    type: git_clone:1.1.1
+    param:
+      remote_url: https://gitee.com/jianmu-dev/jianmu-official-site.git
+      ref: refs/heads/wap
+  node_build:
+    type: nodejs_build:1.2.0-14.16.1
+    param:
+      workspace: ${git_clone.git_path}
+  update_resoure:
+    type: scp_resouce:1.0.0
+    param:
+      ssh_ip: 47.243.164.48
+      ssh_private_key: ((private_key.alixg))
+      remote_file: /home/jianmu-official-site/wap
+      local_file: ${git_clone.git_path}/dist
+  send_message:
+    type: qywx_notice:1.0.0
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_moblie_list: "[]"
+      text_content: "建木官网wap测试环境更新完成\\n\\n版本：${node_build.package_version}"
+      msgtype: "text"
+      mentioned_list: "[]"
