@@ -6,6 +6,9 @@ pipeline:
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-official-site.git
       ref: refs/heads/wap
+      netrc_machine: gitee.com
+      netrc_username: ((gitee.username))
+      netrc_password: ((gitee.password))
   node_build:
     type: nodejs_build:1.2.0-14.16.1
     param:
