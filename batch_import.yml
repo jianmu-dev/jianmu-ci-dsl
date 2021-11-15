@@ -26,11 +26,11 @@ pipeline:
       netrc_username: ((gitee.username))
       netrc_password: ((gitee.password))
   reconfigure_project:
-    type: reconfigure_project:1.0.0
+    type: sync_project_group:1.0.0
     param:
       ci_url: https://ci.test.jianmu.dev
       ci_username: ((jianmu_ci.username))
       ci_password: ((jianmu_ci.password))
       git_path: ${git_clone.git_path}
-      reconfigure_file_path: /reconfigure.yml
+      group_file_path: /project_group.yml
       deletable: false

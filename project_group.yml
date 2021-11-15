@@ -1,0 +1,16 @@
+groups:
+  - name:
+    projects:
+      # 建木api网关
+      - /api-gw/cicd.yml
+      # 建木ci
+      - /ci/server_cicd.yml
+      - /ci/ui_cicd.yml
+      # 开发工具
+      - /dev-tools/docker_image_builder.yml
+      # 建木hub
+      - /hub/server_cicd.yml
+      - /hub/ui_cicd.yml
+      # 官网
+      - /official-site/web_cicd.yml
+      - /official-site/wap_cicd.yml
