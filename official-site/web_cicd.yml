@@ -1,3 +1,17 @@
+trigger:
+  type: webhook
+  param:
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
+    - name: pr_state
+      type: STRING
+      exp: $.body.json.pull_request.state
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
+  matcher: (${trigger.pr_state} == "merged")
+
 pipeline:
   name: 建木官网PC端测试环境 CI/CD
   description: 建木官网PC端测试环境 CI/CD
@@ -27,4 +41,4 @@ pipeline:
       mentioned_moblie_list: "[]"
       text_content: "建木官网PC端测试环境更新完成\\n\\n版本：${node_build.package_version}"
       msgtype: "text"
-      mentioned_list: "[]"
+      mentioned_mobile_list: '["18881035295", "17772427748"]'
