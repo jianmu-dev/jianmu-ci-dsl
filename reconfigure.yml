@@ -9,3 +9,6 @@ projects:
   # 建木hub
   - config_file: /hub/server_cicd.yml
   - config_file: /hub/ui_cicd.yml
+  # 官网
+  - config_file: /official-site/web_cicd.yml
+  - config_file: /official-site/wap_cicd.yml
