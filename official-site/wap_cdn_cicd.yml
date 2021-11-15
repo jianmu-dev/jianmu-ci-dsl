@@ -22,7 +22,7 @@ pipeline:
       qiniu_ak: ((qiniu.AccessKey))
       qiniu_sk: ((qiniu.SecretKey))
       qiniu_zone: z1
-      qiniu_upload_uri_prefix: ${node_build.package_name}/${node_build.package_version}
+      qiniu_upload_uri_prefix: ${node_build.package_name}/${node_build.package_version}/wap
       qiniu_upload_dir: ${git_clone.git_path}/dist
   update_index_page:
     type: scp_resouce:1.0.0
