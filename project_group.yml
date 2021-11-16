@@ -14,3 +14,5 @@ groups:
       # 官网
       - /official-site/web_cicd.yml
       - /official-site/wap_cicd.yml
+      # ssl证书
+      - /ssl/cert_cd.yml
