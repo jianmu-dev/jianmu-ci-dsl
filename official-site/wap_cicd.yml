@@ -7,10 +7,13 @@ trigger:
     - name: pr_state
       type: STRING
       exp: $.body.json.pull_request.state
+    - name: pr_target_branch
+      type: STRING
+      exp: $.body.json.target_branch
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  matcher: (${trigger.pr_state} == "merged")
+  matcher: (${trigger.pr_target_branch} == "wap" && ${trigger.pr_state} == "merged")
 
 pipeline:
   name: 建木官网手机端测试环境 CI/CD
@@ -19,7 +22,7 @@ pipeline:
     type: git_clone:1.1.1
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-official-site.git
-      ref: refs/heads/wap
+      ref: refs/heads/${trigger.pr_target_branch}
       netrc_machine: gitee.com
       netrc_username: ((gitee.username))
       netrc_password: ((gitee.password))
@@ -32,7 +35,7 @@ pipeline:
     param:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
-      remote_file: /home/jianmu-official-site/wap
+      remote_file: /home/jianmu-official-site/${trigger.pr_target_branch}
       local_file: ${git_clone.git_path}/dist
   send_message:
     type: qywx_notice:1.0.0
