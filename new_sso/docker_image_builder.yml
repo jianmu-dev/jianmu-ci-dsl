@@ -7,7 +7,7 @@ pipeline:
   ref: new_sso_image_builder
   description: 构建建木新版单点登录docker镜像
   git_clone:
-    type: git_clone:1.0.0
+    type: git_clone:1.1.0
     param:
       remote_url: https://gitee.com/jianmu-hub/jianmu-sso.git
       ref: refs/heads/master
