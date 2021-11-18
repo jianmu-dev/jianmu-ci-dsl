@@ -50,7 +50,7 @@ pipeline:
         &&
         docker ps
         &&
-        cd /root/jianmu-hub-deploy/new_sso
+        cd /root/jianmu-hub-deploy/new-sso
         &&
         docker pull ${global.image_name}:${global.image_tag_prefix}-${global.image_tag_suffix}
         &&
