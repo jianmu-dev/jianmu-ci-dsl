@@ -1,0 +1,51 @@
+eb: api_gateway_prod_cicd_hook
+
+param:
+  image_name: jianmudev/private
+  image_tag_prefix: jianmu-api-gateway
+
+pipeline:
+  name: API网关生产环境CI/CD
+  ref: api_gateway_prod_cicd
+  description: API网关生产环境CI/CD
+  git_clone:
+    type: git_clone:1.0.0
+    param:
+      remote_url: https://gitee.com/jianmu-hub/jianmu-api-gateway.git
+      ref: ${event.gitee_ref}
+      netrc_machine: gitee.com
+      netrc_username: ((gitee.username))
+      netrc_password: ((gitee.password))
+  deploy_server:
+    type: ssh_cmd:1.0.0
+    param:
+      ssh_ip: 8.140.50.113
+      ssh_private_key: ((private_key.aliserver))
+      ssh_cmd: >-
+        docker images
+        &&
+        docker ps
+        &&
+        cd /root/jianmu-hub-deploy/api-gateway
+        &&
+        docker pull ${global.image_name}:${global.image_tag_prefix}-${git_clone.git_tag}
+        &&
+        docker-compose down --rmi all
+        &&
+        echo version=${git_clone.git_tag} > .env
+        &&
+        docker-compose up -d
+        &&
+        docker images
+        &&
+        docker ps
+        &&
+        echo done
+  send_message:
+    type: qywx_notice:1.0.0
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_moblie_list: "[]"
+      text_content: "API网关生产环境更新完成。\\n\\n镜像：${global.image_name}:${global.image_tag_prefix}-${git_clone.git_tag}"
+      msgtype: "text"
+      mentioned_list: "[]"
