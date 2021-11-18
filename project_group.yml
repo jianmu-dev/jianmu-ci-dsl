@@ -17,3 +17,5 @@ groups:
       - /official-site/cicd.yml
       # ssl证书
       - /ssl/cert_cd.yml
+      # 建木新版sso
+      - /new-sso/cicd.yml
