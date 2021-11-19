@@ -5,7 +5,7 @@ global:
 
 trigger:
   type: cron
-  schedule: 0 0 0 1 * ? *
+  schedule: 0 0 12 21 * ? *
 
 workflow:
   name: 更新ssl证书：jianmu.dev
