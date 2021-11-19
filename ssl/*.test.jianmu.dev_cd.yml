@@ -3,6 +3,10 @@ global:
     domain: "*.test.jianmu.dev"
     ssl_dir: /etc/nginx/ssl/_.test.jianmu.dev
 
+trigger:
+  type: cron
+  schedule: 0 0 0 1 * ? *
+
 workflow:
   name: 更新ssl证书：*.test.jianmu.dev
   start:
