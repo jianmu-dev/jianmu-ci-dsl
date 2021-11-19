@@ -28,7 +28,7 @@ workflow:
       - acme_ssl_aliyun
     targets:
       - end
-    type: scp_resouce:1.0.0
+    type: scp_resouce:1.1.0
     param:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
@@ -39,7 +39,7 @@ workflow:
       - acme_ssl_aliyun
     targets:
       - end
-    type: scp_resouce:1.0.0
+    type: scp_resouce:1.1.0
     param:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
