@@ -16,7 +16,7 @@ pipeline:
     param:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
-      remote_file: /etc/nginx/docs_v2
+      remote_file: /home/jianmu-docs/v2
       local_file: ${git_clone.git_path}/.vitepress/dist
   send_message:
     type: qywx_notice:1.0.0
