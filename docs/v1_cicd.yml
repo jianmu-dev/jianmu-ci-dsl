@@ -1,7 +1,7 @@
 pipeline:
-  name: 建木文档CI/CD
-  ref: jianmu_docs_cicd
-  description: 建木文档CI/CD
+  name: 建木文档v1 CI/CD
+  ref: jianmu_docs_v1_cicd
+  description: 建木文档v1 CI/CD
   git_clone:
     type: git_clone:1.0.0
     param:
@@ -16,13 +16,13 @@ pipeline:
     param:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
-      remote_file: /etc/nginx/docs
+      remote_file: /etc/nginx/docs_v1
       local_file: ${git_clone.git_path}/.vitepress/dist
   send_message:
     type: qywx_notice:1.0.0
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木文档更新完成"
+      text_content: "建木文档v1更新完成"
       msgtype: "text"
       mentioned_list: "[]"
