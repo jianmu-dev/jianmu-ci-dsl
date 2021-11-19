@@ -4,7 +4,7 @@ global:
     ssl_dir: /etc/nginx/ssl/_.jianmu.dev
 
 workflow:
-  name: 更新ssl证书
+  name: 更新ssl证书：*.jianmu.dev
   start:
     type: start
     targets:
