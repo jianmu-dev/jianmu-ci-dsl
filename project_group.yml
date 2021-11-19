@@ -16,6 +16,8 @@ groups:
       # 官网
       - /official-site/cicd.yml
       # ssl证书
-      - /ssl/cert_cd.yml
+      - /ssl/jianmu.dev_cd.yml
+      - /ssl/*.jianmu.dev_cd.yml
+      - /ssl/*.test.jianmu.dev_cd.yml
       # 建木新版sso
       - /sso/v2_cicd.yml
