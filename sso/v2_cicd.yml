@@ -15,12 +15,12 @@ trigger:
 global:
   param:
     image_name: jianmudev/private
-    image_tag_prefix: jianmu-new-sso
-    image_tag_suffix: latest
+    image_tag_prefix: jianmu-sso
+    image_tag_suffix: v2-latest
 
 pipeline:
-  name: 建木新版sso测试环境 CI/CD
-  description: 建木新版sso测试环境 CI/CD
+  name: 建木单点登录v2测试环境 CI/CD
+  description: 建木单点登录v2测试环境 CI/CD
   git_clone:
     type: git_clone:1.1.1
     param:
@@ -50,15 +50,15 @@ pipeline:
         &&
         docker ps
         &&
-        cd /root/jianmu-hub-deploy/new-sso
+        cd /root/jianmu-hub-deploy/sso
         &&
         docker pull ${global.image_name}:${global.image_tag_prefix}-${global.image_tag_suffix}
         &&
-        docker-compose down --rmi all
+        docker-compose -f docker-compose-v2.yml down --rmi all
         &&
-        echo version=${global.image_tag_suffix} > .env
+        echo v2_version=${global.image_tag_suffix} > .env
         &&
-        docker-compose up -d
+        docker-compose -f docker-compose-v2.yml up -d
         &&
         docker images
         &&
@@ -70,6 +70,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木新版sso测试环境更新完成。\\n\\n镜像：${global.image_name}:${global.image_tag_prefix}-${maven_jib_build.version}\\n\\n请验收功能。"
+      text_content: "建木单点登录v2测试环境更新完成。\\n\\n镜像：${global.image_name}:${global.image_tag_prefix}-${maven_jib_build.version}\\n\\n请验收功能。"
       msgtype: "text"
       mentioned_mobile_list: '["15320260902"]'
