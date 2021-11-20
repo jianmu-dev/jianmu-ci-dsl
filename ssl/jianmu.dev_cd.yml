@@ -19,7 +19,7 @@ workflow:
     targets:
       - scp_cert
       - scp_key
-    type: acme_ssl_aliyun:1.0.0
+    type: acme_ssl_aliyun:1.0.1
     param:
       wget_use: true
       ali_key: ((ali.jianmu_dev_key))
