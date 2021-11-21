@@ -6,22 +6,22 @@ pipeline:
   name: 建木CI前端测试环境 CI/CD
   description: 建木CI前端测试环境 CI/CD
   git_clone_ui:
-    type: git_clone:1.0.1
+    type: git_clone:1.1.1
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
       # TODO 后续来源为event，筛选指定分支的push
       ref: refs/heads/2.0.0
   node_build:
-    type: nodejs_build:1.0.0-14.16.1
+    type: nodejs_build:1.2.1-14.16.1
     param:
       workspace: ${git_clone_ui.git_path}/ui
   git_clone_image:
-    type: git_clone:1.0.1
+    type: git_clone:1.1.1
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ui-image.git
-      ref: refs/heads/master
+      ref: refs/heads/2.0.0
   image_build:
-    type: docker_image_build:1.0.0
+    type: docker_image_build:1.0.1
     param:
       docker_username: ((dockerhub.username))
       docker_password: ((dockerhub.password))
@@ -32,7 +32,7 @@ pipeline:
       workspace: ${git_clone_image.git_path}
       cmd_pre: cp -r ${git_clone_ui.git_path}/ui/dist .
   ssh_cmd:
-    type: ssh_cmd:1.0.0
+    type: ssh_cmd:1.0.1
     param:
       ssh_ip: 172.20.148.86
       ssh_private_key: ((jianmu_ci.server_private_key))
@@ -69,10 +69,10 @@ pipeline:
         &&
         echo done
   send_message:
-    type: qywx_notice:1.0.0
+    type: qywx_notice:1.2.1
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木CI前端测试环境更新完成。\\n\\n开发分支：${git_clone_ui.git_branch}"
+      text_content: "建木CI前端测试环境更新完成。\\n\\n开发分支：${git_clone_ui.git_branch}\\n版本：${node_build.package_version}"
       msgtype: "text"
       mentioned_list: "[]"
