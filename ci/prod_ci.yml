@@ -56,7 +56,7 @@ workflow:
       - image_build
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ui-image.git
-      ref: refs/heads/master
+      ref: refs/heads/2.0.0
   image_build:
     type: docker_image_build:1.0.0
     sources:
