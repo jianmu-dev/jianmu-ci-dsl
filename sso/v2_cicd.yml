@@ -37,15 +37,15 @@ pipeline:
         &&
         docker ps
         &&
-        cd /root/jianmu-hub-deploy/sso
+        cd /root/jianmu-hub-deploy/sso/v2
         &&
         docker pull ${global.image_name}:${global.image_tag_prefix}-${git_clone.git_tag}
         &&
-        docker-compose -f docker-compose-v2.yml down --rmi all
+        docker-compose down --rmi all
         &&
         echo v2_version=${git_clone.git_tag} > .env
         &&
-        docker-compose -f docker-compose-v2.yml up -d
+        docker-compose up -d
         &&
         docker images
         &&
