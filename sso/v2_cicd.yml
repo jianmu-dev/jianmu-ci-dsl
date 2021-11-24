@@ -70,6 +70,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木单点登录v2测试环境更新完成。\\n\\n镜像：${global.image_name}:${global.image_tag_prefix}-${maven_jib_build.version}\\n\\n请验收功能。"
+      text_content: "建木单点登录v2测试环境更新完成。\\n\\版本：${maven_jib_build.version}\\n\\n请验收功能。"
       msgtype: "text"
       mentioned_mobile_list: '["15320260902"]'
