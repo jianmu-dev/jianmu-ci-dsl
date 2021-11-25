@@ -1,3 +1,6 @@
+name: 建木官网测试环境 CI/CD
+description: 建木官网测试环境 CI/CD
+
 trigger:
   type: webhook
   param:
@@ -13,11 +16,9 @@ trigger:
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  matcher: ((${trigger.pr_target_branch} == "wap" || ${trigger.pr_target_branch} == "web") && ${trigger.pr_state} == "merged")
+  only: ((${trigger.pr_target_branch} == "wap" || ${trigger.pr_target_branch} == "web") && ${trigger.pr_state} == "merged")
 
 pipeline:
-  name: 建木官网测试环境 CI/CD
-  description: 建木官网测试环境 CI/CD
   git_clone:
     type: git_clone:1.1.1
     param:

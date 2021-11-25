@@ -1,3 +1,6 @@
+name: 建木单点登录v2测试环境 CI/CD
+description: 建木单点登录v2测试环境 CI/CD
+
 trigger:
   type: webhook
   param:
@@ -13,7 +16,7 @@ trigger:
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  matcher: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged")
+  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged")
 
 global:
   param:
@@ -22,8 +25,6 @@ global:
     image_tag_suffix: v2-latest
 
 pipeline:
-  name: 建木单点登录v2测试环境 CI/CD
-  description: 建木单点登录v2测试环境 CI/CD
   git_clone:
     type: git_clone:1.1.1
     param:

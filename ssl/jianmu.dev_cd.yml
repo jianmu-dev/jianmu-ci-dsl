@@ -1,3 +1,5 @@
+name: 更新ssl证书：jianmu.dev
+
 global:
   param:
     domain: "jianmu.dev"
@@ -8,7 +10,6 @@ trigger:
   schedule: 0 0 12 1 * ? *
 
 workflow:
-  name: 更新ssl证书：jianmu.dev
   start:
     type: start
     targets:

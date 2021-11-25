@@ -1,10 +1,11 @@
+name: API网关测试环境CI/CD
+description: API网关测试环境CI/CD
+
 global:
   param:
     image_name: jianmudev/private
 
 pipeline:
-  name: API网关测试环境CI/CD
-  description: API网关测试环境CI/CD
   git_clone:
     type: git_clone:1.0.0
     param:

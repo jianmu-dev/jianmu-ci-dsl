@@ -1,3 +1,5 @@
+name: 批量导入项目
+
 trigger:
   type: webhook
   param:
@@ -13,10 +15,9 @@ trigger:
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  matcher: (${trigger.gitee_event} == "Push Hook" && ${trigger.git_ref} == "refs/heads/test")
+  only: (${trigger.gitee_event} == "Push Hook" && ${trigger.git_ref} == "refs/heads/test")
 
 pipeline:
-  name: 批量导入项目
   git_clone:
     type: git_clone:1.1.1
     param:

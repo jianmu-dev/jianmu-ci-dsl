@@ -1,10 +1,11 @@
+name: 建木CI服务端测试环境 CI/CD
+description: 建木CI服务端测试环境 CI/CD
+
 global:
   param:
     image_name: jianmudev/jianmu-ci-server
 
 pipeline:
-  name: 建木CI服务端测试环境 CI/CD
-  description: 建木CI服务端测试环境 CI/CD
   git_clone:
     type: git_clone:1.1.1
     param:

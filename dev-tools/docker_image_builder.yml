@@ -1,6 +1,7 @@
+name: 构建dev-tools的docker镜像
+description: 构建dev-tools的docker镜像
+
 pipeline:
-  name: 构建dev-tools的docker镜像
-  description: 构建dev-tools的docker镜像
   git_clone:
     type: git_clone:1.0.0
     param:
