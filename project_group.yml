@@ -21,3 +21,5 @@ groups:
       - /ssl/*.test.jianmu.dev_cd.yml
       # 建木新版sso
       - /sso/v2_cicd.yml
+      # 建木sms
+      - /sms/cicd.yml
