@@ -1,0 +1,30 @@
+name: issue通知
+
+trigger:
+  type: webhook
+  param:
+    - name:  issue_title
+      type: STRING
+      exp: $.body.json.issue.title
+    - name:  issue_url
+      type: STRING
+      exp: $.body.json.issue.html_url
+    - name: issue_type
+      type: STRING
+      exp: $.body.json.issue.type_name
+    - name: issue_status
+      type: STRING
+      exp: $.body.json.issue.state_name
+    - name: assignee
+      type: STRING
+      exp: $.body.json.assignee.name
+pipeline:
+  qywx_notice:
+    type: qywx_notice:1.2.0
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      msgtype: news
+      news_title: 天啦噜，Issue状态更新啦啦啦！
+      news_url: ${trigger.issue_url}
+      news_description: "Issue标题: ${trigger.issue_title} \\n Issue类型：${trigger.issue_type} \\n Issue状态：${trigger.issue_status} \\n 负责人：${trigger.assignee} "
+      news_picurl: http://lmg.jj20.com/up/allimg/1112/0HG9115206/1ZHG15206-4-1200.jpg

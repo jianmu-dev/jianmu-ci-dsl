@@ -8,6 +8,7 @@ groups:
       # 建木ci
       - /ci/server_cicd.yml
       - /ci/ui_cicd.yml
+      - /ci/issue_notice.yml
       # 开发工具
       - /dev-tools/docker_image_builder.yml
       # 建木hub
