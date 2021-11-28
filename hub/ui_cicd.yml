@@ -62,6 +62,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木Hub前端CDN更新完成。\\n\\n版本：${node_build.package_version}"
+      text_content: "建木Hub前端CDN更新完成。\\n\\n版本：${git_clone.git_tag}"
       msgtype: "text"
       mentioned_list: "[]"
