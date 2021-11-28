@@ -10,7 +10,7 @@ global:
 
 pipeline:
   git_clone:
-    type: git_clone:1.0.0
+    type: git_clone:1.1.1
     param:
       remote_url: https://gitee.com/jianmu-hub/jianmu-api-gateway.git
       ref: ${event.gitee_ref}
@@ -18,7 +18,7 @@ pipeline:
       netrc_username: ((gitee.username))
       netrc_password: ((gitee.password))
   deploy_server:
-    type: ssh_cmd:1.0.0
+    type: ssh_cmd:1.0.1
     param:
       ssh_ip: 8.140.50.113
       ssh_private_key: ((private_key.aliserver))
@@ -43,7 +43,7 @@ pipeline:
         &&
         echo done
   send_message:
-    type: qywx_notice:1.0.0
+    type: qywx_notice:1.2.1
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"

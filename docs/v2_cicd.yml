@@ -3,23 +3,23 @@ description: 建木文档v2 CI/CD
 
 pipeline:
   git_clone:
-    type: git_clone:1.0.0
+    type: git_clone:1.1.1
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-docs.git
       ref: refs/heads/master
   node_build:
-    type: nodejs_build:1.0.0-14.16.1
+    type: nodejs_build:1.2.1-14.16.1
     param:
       workspace: ${git_clone.git_path}
   update_resoure:
-    type: scp_resouce:1.0.0
+    type: scp_resouce:1.1.0
     param:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
       remote_file: /home/jianmu-docs/v2
       local_file: ${git_clone.git_path}/.vitepress/dist
   send_message:
-    type: qywx_notice:1.0.0
+    type: qywx_notice:1.2.1
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"

@@ -14,7 +14,7 @@ workflow:
     targets:
       - git_clone
   git_clone:
-    type: git_clone:1.0.1
+    type: git_clone:1.1.1
     sources:
       - start
     targets:
@@ -27,7 +27,7 @@ workflow:
       netrc_username: ((gitee.username))
       netrc_password: ((gitee.password))
   maven_jib_build:
-    type: maven_build:1.2.0-jdk11
+    type: maven_build:1.3.1-jdk11
     sources:
       - git_clone
     targets:
@@ -41,7 +41,7 @@ workflow:
       docker_password: ((dockerhub.password))
       maven_public_url: https://nexus.jianmu.dev/repository/maven-public/
   node_build:
-    type: nodejs_build:1.1.0-14.16.1
+    type: nodejs_build:1.2.1-14.16.1
     sources:
       - git_clone
     targets:
@@ -50,7 +50,7 @@ workflow:
       workspace: ${git_clone.git_path}/ui
       mirror_registry_url: https://registry.npm.taobao.org
   git_clone_image:
-    type: git_clone:1.0.1
+    type: git_clone:1.1.1
     sources:
       - node_build
     targets:
@@ -59,7 +59,7 @@ workflow:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ui-image.git
       ref: refs/heads/master
   image_build:
-    type: docker_image_build:1.0.0
+    type: docker_image_build:1.0.1
     sources:
       - git_clone_image
     targets:
@@ -74,7 +74,7 @@ workflow:
       workspace: ${git_clone_image.git_path}
       cmd_pre: cp -r ${git_clone.git_path}/ui/dist .
   send_message:
-    type: qywx_notice:1.1.0
+    type: qywx_notice:1.2.1
     sources:
       - maven_jib_build
       - image_build
