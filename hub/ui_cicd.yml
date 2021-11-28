@@ -1,14 +1,32 @@
-eb: jianmu_hub_ui_cdn_ci_cd_hook
-
 name: 建木Hub前端CDN CI/CD
 description: 建木Hub前端CDN CI/CD
+
+trigger:
+  type: webhook
+  param:
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
+    - name: gitee_event
+      type: STRING
+      exp: $.header.X-Gitee-Event
+    - name: gitee_tag_created
+      type: BOOL
+      exp: $.body.json.created
+    - name: gitee_ref
+      type: STRING
+      exp: $.body.json.ref
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
+  only: (${trigger.gitee_event} === "Tag Push Hook" && ${trigger.gitee_tag_created})
 
 pipeline:
   git_clone:
     type: git_clone:1.1.1
     param:
       remote_url: https://gitee.com/jianmu-hub/jianmu-hub-ui.git
-      ref: ${event.gitee_ref}
+      ref: ${trigger.gitee_ref}
       netrc_machine: gitee.com
       netrc_username: ((gitee.username))
       netrc_password: ((gitee.password))
