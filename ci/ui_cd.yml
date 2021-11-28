@@ -1,8 +1,8 @@
 # 部署生产，通过上游打镜像流程，触发（结合chat-ops）
+name: 建木CI前端CDN CD
+description: 建木CI前端CDN CD
+
 pipeline:
-  name: 建木CI前端CDN CD
-  ref: jianmu_ci_ui_cdn_cd
-  description: 建木CI前端CDN CD
   git_clone:
     type: git_clone:1.0.1
     param:

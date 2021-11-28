@@ -1,10 +1,11 @@
+name: 构建API网关docker镜像
+description: 构建API网关docker镜像
+
 global:
   param:
     image_name: jianmudev/private
 
 pipeline:
-  name: 构建API网关docker镜像
-  description: 构建API网关docker镜像
   git_clone:
     type: git_clone:1.0.0
     param:

@@ -1,7 +1,7 @@
+name: 建木官网手机端CDN CI/CD
+description: 建木官网手机端CDN CI/CD
+
 pipeline:
-  name: 建木官网手机端CDN CI/CD
-  ref: official_site_wap_cdn_cicd
-  description: 建木官网手机端CDN CI/CD
   git_clone:
     type: git_clone:1.1.0
     param:

@@ -1,3 +1,6 @@
+name: 构建单点登录docker镜像
+description: 构建单点登录docker镜像
+
 global:
   param:
     image_name: jianmudev/private
@@ -5,9 +8,6 @@ global:
     image_tag_suffix: 1.0.1
 
 pipeline:
-  name: 构建单点登录docker镜像
-  ref: sso_image_builder
-  description: 构建单点登录docker镜像
   git_clone:
     type: git_clone:1.0.1
     param:

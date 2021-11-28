@@ -1,14 +1,14 @@
 eb: sms_prod_cicd_hook
 
+name: 建木短信服务生产环境 CI/CD
+description: 建木短信服务生产环境 CI/CD
+
 global:
   param:
     image_name: jianmudev/private
     image_tag_prefix: jianmu-sms
 
 pipeline:
-  name: 建木短信服务生产环境 CI/CD
-  ref: sms_prod_cicd
-  description: 建木短信服务生产环境 CI/CD
   git_clone:
     type: git_clone:1.0.1
     param:

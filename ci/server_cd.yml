@@ -1,13 +1,13 @@
 # 部署生产，通过上游打镜像流程，触发（结合chat-ops）
+name: 建木CI服务端生产环境CD
+description: 建木CI服务端生产环境CD
+
 global:
   param:
     image_name: jianmudev/jianmu-ci-server
     image_tag: v1.1.1
 
 pipeline:
-  name: 建木CI服务端生产环境CD
-  ref: jianmu_ci_server_prod_cd
-  description: 建木CI服务端生产环境CD
   deploy_server:
     type: ssh_cmd:1.0.0
     param:

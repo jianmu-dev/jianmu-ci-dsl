@@ -1,9 +1,9 @@
 eb: jianmu_hub_ui_cdn_ci_cd_hook
 
+name: 建木Hub前端CDN CI/CD
+description: 建木Hub前端CDN CI/CD
+
 pipeline:
-  name: 建木Hub前端CDN CI/CD
-  ref: jianmu_hub_ui_cdn_cicd
-  description: 建木Hub前端CDN CI/CD
   git_clone:
     type: git_clone:1.0.0
     param:

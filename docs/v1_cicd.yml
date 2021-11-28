@@ -1,7 +1,7 @@
+name: 建木文档v1 CI/CD
+description: 建木文档v1 CI/CD
+
 pipeline:
-  name: 建木文档v1 CI/CD
-  ref: jianmu_docs_v1_cicd
-  description: 建木文档v1 CI/CD
   git_clone:
     type: git_clone:1.0.0
     param:
