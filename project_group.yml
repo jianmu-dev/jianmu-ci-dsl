@@ -16,10 +16,6 @@ groups:
       - /hub/ui_cicd.yml
       # 官网
       - /official-site/cicd.yml
-      # ssl证书
-      - /ssl/jianmu.dev_cd.yml
-      - /ssl/*.jianmu.dev_cd.yml
-      - /ssl/*.test.jianmu.dev_cd.yml
       # 建木新版sso
       - /sso/v2_cicd.yml
       # 建木sms
