@@ -1,8 +1,9 @@
 eb: api_gateway_prod_cicd_hook
 
-param:
-  image_name: jianmudev/private
-  image_tag_prefix: jianmu-api-gateway
+global:
+  param:
+    image_name: jianmudev/private
+    image_tag_prefix: jianmu-api-gateway
 
 pipeline:
   name: API网关生产环境CI/CD

@@ -1,7 +1,8 @@
-param:
-  image_name: jianmudev/private
-  image_tag_prefix: jianmu-sso
-  image_tag_suffix: 1.0.1
+global:
+  param:
+    image_name: jianmudev/private
+    image_tag_prefix: jianmu-sso
+    image_tag_suffix: 1.0.1
 
 pipeline:
   name: 构建单点登录docker镜像

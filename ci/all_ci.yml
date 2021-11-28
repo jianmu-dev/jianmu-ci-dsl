@@ -1,8 +1,9 @@
 eb: ci_docker_image_hook
 
-param:
-  ui_image_name: jianmudev/jianmu-ci-ui
-  server_image_name: jianmudev/jianmu-ci-server
+global:
+  param:
+    ui_image_name: jianmudev/jianmu-ci-ui
+    server_image_name: jianmudev/jianmu-ci-server
 
 workflow:
   name: 构建建木CI前/后端docker镜像

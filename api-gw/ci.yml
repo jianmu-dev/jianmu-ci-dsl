@@ -1,5 +1,6 @@
-param:
-  image_name: jianmudev/private
+global:
+  param:
+    image_name: jianmudev/private
 
 pipeline:
   name: 构建API网关docker镜像
