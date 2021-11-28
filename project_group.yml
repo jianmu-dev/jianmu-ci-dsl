@@ -21,6 +21,10 @@ groups:
       - /official-site/web_cdn_cicd.yml
       # 建木sms
       - /sms/cicd.yml
+      # ssl证书
+      - /ssl/jianmu.dev_cd.yml
+      - /ssl/*.jianmu.dev_cd.yml
+      - /ssl/*.test.jianmu.dev_cd.yml
       # 建木新版sso
       - /sso/v1_ci.yml
       - /sso/v2_cicd.yml
