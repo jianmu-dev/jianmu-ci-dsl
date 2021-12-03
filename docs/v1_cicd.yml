@@ -3,7 +3,7 @@ description: 建木文档v1 CI/CD
 
 pipeline:
   git_clone:
-    type: git_clone:1.1.1
+    type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-docs.git
       ref: refs/heads/v1

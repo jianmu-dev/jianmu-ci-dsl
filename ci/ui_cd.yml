@@ -4,7 +4,7 @@ description: 建木CI前端CDN CD
 
 pipeline:
   git_clone:
-    type: git_clone:1.1.1
+    type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
       ref: refs/tags/v2.0.0
