@@ -3,13 +3,12 @@ description: 构建dev-tools的docker镜像
 
 pipeline:
   git_clone:
-    type: git_clone:1.0.0
+    type: git_clone:1.2.0
     param:
       ref: refs/heads/master
       remote_url: https://gitee.com/jianmu-hub/dev-tools.git
-      netrc_machine: gitee.com
-      netrc_username: ((gitee.username))
-      netrc_password: ((gitee.password))
+      username: ((gitee.username))
+      password: ((gitee.password))
   maven_jib:
     type: maven_build:1.0.0-jdk11
     param:

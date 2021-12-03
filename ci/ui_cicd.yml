@@ -7,7 +7,7 @@ global:
 
 pipeline:
   git_clone_ui:
-    type: git_clone:1.1.1
+    type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
       # TODO 后续来源为event，筛选指定分支的push
@@ -17,7 +17,7 @@ pipeline:
     param:
       workspace: ${git_clone_ui.git_path}/ui
   git_clone_image:
-    type: git_clone:1.1.1
+    type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ui-image.git
       ref: refs/heads/master

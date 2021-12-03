@@ -19,13 +19,12 @@ trigger:
 
 pipeline:
   git_clone:
-    type: git_clone:1.1.1
+    type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-dsl.git
       ref: refs/heads/test
-      netrc_machine: gitee.com
-      netrc_username: ((gitee.username))
-      netrc_password: ((gitee.password))
+      username: ((gitee.username))
+      password: ((gitee.password))
   sync_project_group:
     type: sync_project_group:1.1.0
     param:

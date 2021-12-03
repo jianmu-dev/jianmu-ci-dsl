@@ -7,13 +7,12 @@ global:
 
 pipeline:
   git_clone:
-    type: git_clone:1.0.0
+    type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-hub/jianmu-api-gateway.git
       ref: refs/heads/master
-      netrc_machine: gitee.com
-      netrc_username: ((gitee.username))
-      netrc_password: ((gitee.password))
+      username: ((gitee.username))
+      password: ((gitee.password))
   node_build:
     type: nodejs_build:1.0.0-14.16.1
     param:
