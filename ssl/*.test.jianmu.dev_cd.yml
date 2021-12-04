@@ -7,7 +7,7 @@ global:
 
 trigger:
   type: cron
-  schedule: 0 0 12 4 * ? *
+  schedule: 0 0 12 5 * ? *
 
 workflow:
   start:
@@ -20,6 +20,8 @@ workflow:
     targets:
       - scp_cert
       - scp_key
+      - scp_cert_inner
+      - scp_key_inner
     type: acme_ssl_aliyun:1.0.1
     param:
       wget_use: true
@@ -61,9 +63,43 @@ workflow:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
       ssh_cmd: systemctl restart nginx
+  scp_cert_inner:
+    sources:
+      - acme_ssl_aliyun
+    targets:
+      - ssh_cmd_inner
+    type: scp_resouce:1.1.0
+    param:
+      ssh_ip: 172.20.151.88
+      ssh_private_key: ((private_key.test_hub))
+      remote_file: ${global.ssl_dir}/fullchain.cer
+      local_file: ${acme_ssl_aliyun.cer_path}
+  scp_key_inner:
+    sources:
+      - acme_ssl_aliyun
+    targets:
+      - ssh_cmd_inner
+    type: scp_resouce:1.1.0
+    param:
+      ssh_ip: 172.20.151.88
+      ssh_private_key: ((private_key.test_hub))
+      remote_file: ${global.ssl_dir}/private.key
+      local_file: ${acme_ssl_aliyun.key_path}
+  ssh_cmd_inner:
+    sources:
+      - scp_cert_inner
+      - scp_key_inner
+    targets:
+      - send_message
+    type: ssh_cmd:1.0.1
+    param:
+      ssh_ip: 172.20.151.88
+      ssh_private_key: ((private_key.test_hub))
+      ssh_cmd: systemctl restart nginx
   send_message:
     sources:
       - ssh_cmd
+      - ssh_cmd_inner
     targets:
       - end
     type: qywx_notice:1.2.1
