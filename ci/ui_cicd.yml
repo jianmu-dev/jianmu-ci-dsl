@@ -16,11 +16,6 @@ pipeline:
     type: nodejs_build:1.2.1-14.16.1
     param:
       workspace: ${git_clone_ui.git_path}/ui
-  git_clone_image:
-    type: git_clone:1.2.0
-    param:
-      remote_url: https://gitee.com/jianmu-dev/jianmu-ui-image.git
-      ref: refs/heads/master
   image_build:
     type: docker_image_build:1.0.1
     param:
@@ -30,8 +25,7 @@ pipeline:
       image_tag: ${git_clone_ui.git_branch}
       docker_file: Dockerfile
       docker_build_path: .
-      workspace: ${git_clone_image.git_path}
-      cmd_pre: cp -r ${git_clone_ui.git_path}/ui/dist .
+      workspace: ${git_clone_ui.git_path}/ui
   ssh_cmd:
     type: ssh_cmd:1.0.1
     param:
