@@ -21,6 +21,8 @@ workflow:
     targets:
       - scp_cert
       - scp_key
+      - scp_cert_nexus
+      - scp_key_nexus
     type: acme_ssl_aliyun:1.0.1
     param:
       wget_use: true
@@ -56,8 +58,7 @@ workflow:
       - scp_cert
       - scp_key
     targets:
-      - scp_cert_nexus
-      - scp_key_nexus
+      - send_message
     type: ssh_cmd:1.0.1
     param:
       ssh_ip: 47.243.164.48
@@ -65,7 +66,7 @@ workflow:
       ssh_cmd: systemctl restart nginx
   scp_cert_nexus:
     sources:
-      - ssh_cmd
+      - acme_ssl_aliyun
     targets:
       - restart_nexus_nginx
     type: scp_resouce:1.1.0
@@ -76,7 +77,7 @@ workflow:
       local_file: ${acme_ssl_aliyun.cer_path}
   scp_key_nexus:
     sources:
-      - ssh_cmd
+      - acme_ssl_aliyun
     targets:
       - restart_nexus_nginx
     type: scp_resouce:1.1.0
@@ -98,6 +99,7 @@ workflow:
       ssh_cmd: docker restart docker-compose_nginx_1
   send_message:
     sources:
+      - ssh_cmd
       - restart_nexus_nginx
     targets:
       - end
