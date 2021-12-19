@@ -26,15 +26,15 @@ pipeline:
   create_dir:
     type: ssh_cmd:1.0.1
     param:
-      ssh_cmd: mkdir -p /home/jianmu-ci-ui
-      ssh_ip: 8.140.50.113
-      ssh_private_key: ((private_key.aliserver))
+      ssh_cmd: mkdir -p /home/ubuntu/jianmu-ci-ui
+      ssh_ip: 172.16.101.254
+      ssh_private_key: ((private_key.jianmu_prod))
   update_index_page:
     type: scp_resouce:1.1.0
     param:
-      ssh_private_key: ((private_key.aliserver))
-      ssh_ip: 8.140.50.113
-      remote_file: /home/jianmu-ci-ui/index.html
+      ssh_private_key: ((private_key.jianmu_prod))
+      ssh_ip: 172.16.101.254
+      remote_file: /home/ubuntu/jianmu-ci-ui/index.html
       local_file: ${git_clone.git_path}/ui/dist/index.html
   send_message:
     type: qywx_notice:1.2.1
