@@ -5,8 +5,6 @@ groups:
       - /batch_import.yml
       # 开发工具
       - /dev-tools/docker_image_builder.yml
-  - name: 默认分组
-    projects:
   - name: 建木CI
     projects:
       - /ci/server_cicd.yml
