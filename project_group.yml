@@ -1,30 +1,37 @@
 groups:
-  - name:
+  - name: 默认分组
     projects:
       # 批量导入
       - /batch_import.yml
-      # 建木api网关
-      - /api-gw/cd.yml
-      - /api-gw/ci.yml
-      # 建木ci
+  - name: 建木CI
+    projects:
       - /ci/all_ci.yml
       - /ci/server_cd.yml
       - /ci/ui_cd.yml
-      # 建木文档
-      - /docs/v1_cicd.yml
-      - /docs/v2_cicd.yml
-      # 建木hub
+  - name: 建木Hub
+    projects:
+      # 建木API网关
+      - /api-gw/cd.yml
+      - /api-gw/ci.yml
+      # 建木SSO
+      - /sso/v1_ci.yml
+      - /sso/v2_cicd.yml
+      # 建木Hub
       - /hub/server_cicd.yml
       - /hub/ui_cicd.yml
-      # 官网
+      # 建木短信
+      - /sms/cicd.yml
+  - name: 建木官网
+    projects:
       - /official-site/wap_cdn_cicd.yml
       - /official-site/web_cdn_cicd.yml
-      # 建木sms
-      - /sms/cicd.yml
-      # ssl证书
+  - name: 建木文档
+    projects:
+      - /docs/v1_cicd.yml
+      - /docs/v2_cicd.yml
+  - name: SSL证书
+    projects:
       - /ssl/jianmu.dev_cd.yml
       - /ssl/*.jianmu.dev_cd.yml
       - /ssl/*.test.jianmu.dev_cd.yml
-      # 建木新版sso
-      - /sso/v1_ci.yml
-      - /sso/v2_cicd.yml
+
