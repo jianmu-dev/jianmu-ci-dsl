@@ -1,22 +1,28 @@
 groups:
-  - name:
+  - name: 默认分组
     projects:
       # 批量导入
       - /batch_import.yml
-      # 建木api网关
-      - /api-gw/cicd.yml
-      # 建木ci
+      # 开发工具
+      - /dev-tools/docker_image_builder.yml
+  - name: 默认分组
+    projects:
+  - name: 建木CI
+    projects:
       - /ci/server_cicd.yml
       - /ci/ui_cicd.yml
       - /ci/issue_notice.yml
-      # 开发工具
-      - /dev-tools/docker_image_builder.yml
-      # 建木hub
+  - name: 建木Hub
+    projects:
+      # 建木API网关
+      - /api-gw/cicd.yml
+      # 建木Hub
       - /hub/server_cicd.yml
       - /hub/ui_cicd.yml
-      # 官网
-      - /official-site/cicd.yml
-      # 建木新版sso
+      # 建木新版SSO
       - /sso/v2_cicd.yml
-      # 建木sms
+      # 建木短信
       - /sms/cicd.yml
+  - name: 建木官网
+    projects:
+      - /official-site/cicd.yml
