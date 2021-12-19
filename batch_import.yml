@@ -26,7 +26,7 @@ pipeline:
       username: ((gitee.username))
       password: ((gitee.password))
   sync_project_group:
-    type: sync_project_group:1.1.0
+    type: sync_project_group:2.0.0
     param:
       ci_url: https://ci.jianmu.run
       ci_username: ((jianmu_ci.username))
