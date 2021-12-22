@@ -23,7 +23,7 @@ trigger:
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged" (${trigger.pr_label} == "daihw:master" || ${trigger.pr_label} == "黄熙:master"))
+  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged" && (${trigger.pr_label} == "daihw:master" || ${trigger.pr_label} == "黄熙:master"))
 
 pipeline:
   git_clone:
