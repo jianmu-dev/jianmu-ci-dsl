@@ -13,6 +13,8 @@ groups:
       # 建木API网关
       - /api-gw/cd.yml
       - /api-gw/ci.yml
+      # 建木二维码登录
+      - /qr-code-login/cicd.yml
       # 建木SSO
       - /sso/v1_ci.yml
       - /sso/v2_cicd.yml
