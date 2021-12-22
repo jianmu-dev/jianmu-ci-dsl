@@ -5,12 +5,31 @@ global:
   param:
     image_name: jianmudev/jianmu-ci-ui
 
+trigger:
+  type: webhook
+  param:
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
+    - name: pr_state
+      type: STRING
+      exp: $.body.json.pull_request.state
+    - name: pr_target_branch
+      type: STRING
+      exp: $.body.json.target_branch
+    - name: pr_label
+      type: STRING
+      exp: $.body.json.pull_request.head.label
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
+  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged" && (${trigger.pr_label} == "老技:master" || ${trigger.pr_label} == "冯浩:master" || ${trigger.pr_label} == "comyan:master"))
+
 pipeline:
   git_clone_ui:
     type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
-      # TODO 后续来源为event，筛选指定分支的push
       ref: refs/heads/master
   node_build:
     type: nodejs_build:1.2.1-14.16.1
