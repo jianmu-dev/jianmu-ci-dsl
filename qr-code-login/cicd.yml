@@ -45,8 +45,7 @@ pipeline:
   create_dir:
     type: ssh_cmd:1.0.1
     param:
-      # TODO 测试
-      ssh_cmd: mkdir -p /home/qr-code-login-page/qr_code_login_tmp
+      ssh_cmd: mkdir -p /home/qr-code-login-page/qr_code_login
       ssh_ip: 8.140.50.113
       ssh_private_key: ((private_key.aliserver))
   update_index_page:
@@ -54,8 +53,7 @@ pipeline:
     param:
       ssh_private_key: ((private_key.aliserver))
       ssh_ip: 8.140.50.113
-      # TODO 测试
-      remote_file: /home/qr-code-login-page/qr_code_login_tmp/index.html
+      remote_file: /home/qr-code-login-page/qr_code_login/index.html
       local_file: ${git_clone.git_path}/build/index.html
   send_message:
     type: qywx_notice:1.2.1
