@@ -137,6 +137,7 @@ workflow:
     sources:
       - ssh_cmd
       - restart_nexus_nginx
+      - scp_cert_test_env
     targets:
       - end
     type: qywx_notice:1.2.1
