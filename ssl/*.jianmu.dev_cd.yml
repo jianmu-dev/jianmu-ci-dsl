@@ -135,7 +135,7 @@ workflow:
       ssh_ip: 172.16.101.253
       ssh_user: ubuntu
       ssh_private_key: ((private_key.jianmu_test))
-      ssh_cmd: systemctl restart nginx
+      ssh_cmd: sudo systemctl restart nginx
   send_message:
     sources:
       - ssh_cmd
