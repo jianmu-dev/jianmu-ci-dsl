@@ -28,7 +28,7 @@ workflow:
       - scp_key_test_env
     type: acme_ssl_aliyun:1.0.1
     param:
-      wget_use: true
+      wget_use: false
       ali_key: ((ali.jianmu_dev_key))
       domain: ${global.domain}
       ali_secret: ((ali.jianmu_dev_secret))
