@@ -22,6 +22,9 @@ groups:
       - /sso/v2_cicd.yml
       # 建木短信
       - /sms/cicd.yml
-  - name: 建木官网
+  - name: 建木运营
     projects:
+      # 建木官网
       - /official-site/cicd.yml
+      # 建木博客
+      - /blog/cicd.yml
