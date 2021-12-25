@@ -36,11 +36,11 @@ pipeline:
       ssh_private_key: ((private_key.172_16_101_253))
       remote_file: /home/ubuntu/jianmu-blog
       local_file: ${git_clone.git_path}/public
-#  send_message:
-#    type: qywx_notice:1.2.1
-#    param:
-#      bot_webhook_url: ((charbot.webhook_url))
-#      mentioned_moblie_list: "[]"
-#      text_content: "建木博客测试环境更新完成"
-#      msgtype: "text"
-#      mentioned_list: "[]"
+  send_message:
+    type: qywx_notice:1.2.1
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_moblie_list: "[]"
+      text_content: "建木博客测试环境更新完成"
+      msgtype: "text"
+      mentioned_list: "[]"
