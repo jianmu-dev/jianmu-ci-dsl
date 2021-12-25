@@ -28,7 +28,6 @@ pipeline:
     type: nodejs_build:1.2.1-16.13.0
     param:
       workspace: ${git_clone.git_path}
-      build_arg: --mode prod
   update_resoure:
     type: scp_resouce:1.1.0
     param:
