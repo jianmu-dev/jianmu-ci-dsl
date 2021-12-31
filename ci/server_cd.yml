@@ -5,7 +5,7 @@ description: 建木CI服务端生产环境CD
 global:
   param:
     image_name: jianmudev/jianmu-ci-server
-    image_tag: v2.1.0
+    image_tag: v2.1.1
 
 pipeline:
   deploy_server:
