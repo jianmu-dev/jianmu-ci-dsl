@@ -50,6 +50,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木CI服务端生产环境更新完成。\\n\\n版本：${global.image_tag}"
+      text_content: "建木CI服务端生产环境更新完成。\\n\\n版本：${global.image_tag}\\n\\n网址：https://ci.jianmu.dev"
       msgtype: "text"
       mentioned_list: "[]"
