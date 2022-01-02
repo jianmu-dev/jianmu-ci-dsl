@@ -1,0 +1,140 @@
+name: 建木文档CDN CI/CD
+description: 建木文档CDN CI/CD
+
+global:
+  param:
+    cdn_base_url: https://cdn.jianmu.run
+
+trigger:
+  type: webhook
+  param:
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
+    - name: gitee_event
+      type: STRING
+      exp: $.header.X-Gitee-Event
+    - name: gitee_tag_created
+      type: BOOL
+      exp: $.body.json.created
+    - name: gitee_ref
+      type: STRING
+      exp: $.body.json.ref
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
+  only: (${trigger.gitee_event} === "Tag Push Hook" && ${trigger.gitee_tag_created})
+
+workflow:
+  start:
+    type: start
+    targets:
+      - git_clone
+  git_clone:
+    type: git_clone:1.2.0
+    sources:
+      - start
+    targets:
+      - node_build
+    param:
+      remote_url: https://gitee.com/jianmu-dev/jianmu-docs.git
+      ref: ${trigger.gitee_ref}
+  node_build:
+    type: nodejs_build:1.2.1-14.16.1
+    sources:
+      - git_clone
+    targets:
+      - confirm_version
+    param:
+      workspace: ${git_clone.git_path}
+      build_arg: --mode cdn
+  confirm_version:
+    type: string:1.0.0-nodejs16.13.1
+    sources:
+      - node_build
+    targets:
+      - qiniu_upload
+      - git_clone_wrapper
+    param:
+      expression: '"v" + "${git_clone.git_tag}".substring(0, "${git_clone.git_tag}".indexOf("."))'
+  qiniu_upload:
+    type: qiniu_upload:1.0.3
+    sources:
+      - confirm_version
+    targets:
+      - send_message
+    param:
+      qiniu_bucket: jianmu
+      qiniu_ak: ((qiniu.AccessKey))
+      qiniu_sk: ((qiniu.SecretKey))
+      qiniu_zone: z1
+      qiniu_upload_uri_prefix: ${node_build.package_name}/${git_clone.git_tag}
+      qiniu_upload_dir: ${git_clone.git_path}/.vitepress/dist
+  git_clone_wrapper:
+    type: git_clone:1.2.0
+    sources:
+      - confirm_version
+    targets:
+      - node_build_wrapper
+    param:
+      remote_url: https://gitee.com/jianmu-hub/jianmu-cdn-wrapper.git
+      ref: refs/heads/master
+      username: ((gitee.username))
+      password: ((gitee.password))
+  node_build_wrapper:
+    image: node:14.16.1-alpine3.13
+    sources:
+      - git_clone_wrapper
+    targets:
+      - qiniu_upload_wrapper
+    environment:
+      workspace: ${git_clone_wrapper.git_path}
+      jianmu_cdn_base_url: ${global.cdn_base_url}
+      jianmu_cdn_index_path: /guide/index.html
+      jianmu_cdn_upload_uri_prefix: ${node_build.package_name}/${git_clone.git_tag}
+    script:
+      - cd ${WORKSPACE}
+      - ls -a
+      - yarn install
+      - yarn build --mode cdn
+  qiniu_upload_wrapper:
+    type: qiniu_upload:1.0.3
+    sources:
+      - node_build_wrapper
+    targets:
+      - update_index_page
+    param:
+      qiniu_bucket: jianmu
+      qiniu_ak: ((qiniu.AccessKey))
+      qiniu_sk: ((qiniu.SecretKey))
+      qiniu_zone: z1
+      qiniu_upload_uri_prefix: jianmu-cdn-wrapper/${node_build.package_name}/${git_clone.git_tag}
+      qiniu_upload_dir: ${git_clone_wrapper.git_path}/dist
+  update_index_page:
+    type: scp_resouce:1.1.0
+    sources:
+      - qiniu_upload_wrapper
+    targets:
+      - send_message
+    param:
+      ssh_ip: 47.243.164.48
+      ssh_private_key: ((private_key.alixg))
+      remote_file: /home/jianmu-docs/${confirm_version.result}/index.html
+      local_file: ${git_clone_wrapper.git_path}/dist/index.html
+  send_message:
+    type: qywx_notice:1.2.1
+    sources:
+      - qiniu_upload
+      - update_index_page
+    targets:
+      - end
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_moblie_list: "[]"
+      text_content: "建木文档cdn更新完成。\\n\\n版本：${git_clone.git_tag}"
+      msgtype: "text"
+      mentioned_list: "[]"
+  end:
+    type: end
+    sources:
+      - send_message

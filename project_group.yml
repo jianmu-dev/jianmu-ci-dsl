@@ -29,8 +29,7 @@ groups:
       - /official-site/wap_cdn_cicd.yml
       - /official-site/web_cdn_cicd.yml
       # 建木文档
-      - /docs/v1_cicd.yml
-      - /docs/v2_cicd.yml
+      - /docs/cicd.yml
       # 建木博客
       - /blog/cicd.yml
   - name: SSL证书
