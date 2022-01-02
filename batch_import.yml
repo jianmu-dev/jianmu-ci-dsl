@@ -26,7 +26,7 @@ pipeline:
       username: ((gitee.username))
       password: ((gitee.password))
   sync_project_group:
-    type: sync_project_group:2.0.0
+    type: sync_project_group:2.1.0
     param:
       ci_url: https://ci.jianmu.run
       ci_username: ((jianmu_ci.username))
@@ -34,3 +34,4 @@ pipeline:
       git_path: ${git_clone.git_path}
       group_file_path: /project_group.yml
       deletable: false
+      sortable: true
