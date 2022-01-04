@@ -96,7 +96,7 @@ workflow:
     environment:
       workspace: ${git_clone_wrapper.git_path}
       jianmu_cdn_base_url: ${global.cdn_base_url}
-      jianmu_cdn_index_path: /index.html
+      jianmu_cdn_index_path: /
       jianmu_cdn_upload_uri_prefix: ${global.package_name}/${git_clone.git_tag}
     script:
       - cd ${WORKSPACE}
