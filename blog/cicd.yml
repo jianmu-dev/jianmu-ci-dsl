@@ -111,6 +111,7 @@ workflow:
       - node_build_wrapper
     targets:
       - update_index_page
+      - update_rss_file
     param:
       qiniu_bucket: jianmu
       qiniu_ak: ((qiniu.AccessKey))
@@ -129,11 +130,23 @@ workflow:
       ssh_private_key: ((private_key.alixg))
       remote_file: /home/jianmu-blog/index.html
       local_file: ${git_clone_wrapper.git_path}/dist/index.html
+  update_rss_file:
+    type: scp_resouce:1.1.0
+    sources:
+      - qiniu_upload_wrapper
+    targets:
+      - send_message
+    param:
+      ssh_ip: 47.243.164.48
+      ssh_private_key: ((private_key.alixg))
+      remote_file: /home/jianmu-blog/jm.xml
+      local_file: ${git_clone_wrapper.git_path}/dist/jm.xml
   send_message:
     type: qywx_notice:1.2.1
     sources:
       - qiniu_upload
       - update_index_page
+      - update_rss_file
     targets:
       - end
     param:
