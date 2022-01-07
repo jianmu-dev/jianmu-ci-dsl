@@ -95,6 +95,8 @@ workflow:
       - git_clone_wrapper
     targets:
       - qiniu_upload_wrapper
+      - update_index_page
+      - update_rss_file
     environment:
       workspace: ${git_clone_wrapper.git_path}
       jianmu_cdn_base_url: ${global.cdn_base_url}
@@ -110,8 +112,7 @@ workflow:
     sources:
       - node_build_wrapper
     targets:
-      - update_index_page
-      - update_rss_file
+      - send_message
     param:
       qiniu_bucket: jianmu
       qiniu_ak: ((qiniu.AccessKey))
@@ -122,7 +123,7 @@ workflow:
   update_index_page:
     type: scp_resouce:1.1.0
     sources:
-      - qiniu_upload_wrapper
+      - node_build_wrapper
     targets:
       - send_message
     param:
@@ -133,7 +134,7 @@ workflow:
   update_rss_file:
     type: scp_resouce:1.1.0
     sources:
-      - qiniu_upload_wrapper
+      - node_build_wrapper
     targets:
       - send_message
     param:
@@ -145,6 +146,7 @@ workflow:
     type: qywx_notice:1.2.1
     sources:
       - qiniu_upload
+      - qiniu_upload_wrapper
       - update_index_page
       - update_rss_file
     targets:
