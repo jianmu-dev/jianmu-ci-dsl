@@ -47,11 +47,13 @@ workflow:
     targets:
       - node_build
     environment:
-      replacement: /${global.package_name}/${git_clone.git_tag}
+      replacement_cdn: ${global.cdn_base_url}
+      replacement_root: /${global.package_name}/${git_clone.git_tag}
       config_file_path: ${git_clone.git_path}/_config.yml
     script:
       - cat ${CONFIG_FILE_PATH}
-      - 'sed -i "s|root: /|root: ${REPLACEMENT}|" ${CONFIG_FILE_PATH}'
+      - 'sed -i "s|url: https://blog.jianmu.dev|url: ${replacement_cdn}|" ${CONFIG_FILE_PATH}'
+      - 'sed -i "s|root: /|root: ${replacement_root}|" ${CONFIG_FILE_PATH}'
       - cat ${CONFIG_FILE_PATH}
   node_build:
     type: nodejs_build:1.2.1-16.13.0
