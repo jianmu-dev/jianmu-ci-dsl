@@ -141,7 +141,7 @@ workflow:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
       remote_file: /home/jianmu-blog/jm.xml
-      local_file: ${git_clone_wrapper.git_path}/dist/jm.xml
+      local_file: ${git_clone.git_path}/public/jm.xml
   send_message:
     type: qywx_notice:1.2.1
     sources:
