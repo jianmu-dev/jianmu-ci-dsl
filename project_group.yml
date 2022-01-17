@@ -26,8 +26,9 @@ groups:
   - name: 建木运营
     projects:
       # 建木官网
-      - /official-site/wap_cdn_cicd.yml
-      - /official-site/web_cdn_cicd.yml
+      - /official-site/cicd.yml
+      #      - /official-site/wap_cdn_cicd.yml
+      #      - /official-site/web_cdn_cicd.yml
       # 建木文档
       - /docs/cicd.yml
       # 建木博客
