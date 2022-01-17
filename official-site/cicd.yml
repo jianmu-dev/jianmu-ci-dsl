@@ -16,7 +16,7 @@ trigger:
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  only: ((${trigger.pr_target_branch} == "wap" || ${trigger.pr_target_branch} == "web") && ${trigger.pr_state} == "merged")
+  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged")
 
 pipeline:
   git_clone:
@@ -33,16 +33,17 @@ pipeline:
   update_resoure:
     type: scp_resouce:1.1.0
     param:
-      ssh_ip: 192.168.0.222
-      ssh_private_key: ((jianmu_hub.server_private_key))
-      remote_file: /home/jianmu-official-site/${trigger.pr_target_branch}
+      ssh_ip: 172.16.101.253
+      ssh_user: ubuntu
+      ssh_private_key: ((private_key.172_16_101_253))
+      remote_file: /home/ubuntu/jianmu-official-site
       local_file: ${git_clone.git_path}/dist
   send_message:
     type: qywx_notice:1.2.0
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木官网测试环境更新完成\\n\\n分支：${trigger.pr_target_branch}\\n版本：${node_build.package_version}\\n\\n网址：https://portal.test.jianmu.dev"
+      text_content: "建木官网测试环境更新完成\\n\\n版本：${node_build.package_version}\\n\\n网址：https://portal.test.jianmu.dev"
       msgtype: "text"
       mentioned_mobile_list: '["18881035295", "17772427748"]'
   send_message_ui:
@@ -50,6 +51,6 @@ pipeline:
     param:
       bot_webhook_url: ((charbot.ui_webhook_url))
       mentioned_moblie_list: "[]"
-      text_content: "建木官网测试环境更新完成\\n\\n分支：${trigger.pr_target_branch}\\n版本：${node_build.package_version}\\n\\n网址：https://portal.test.jianmu.dev"
+      text_content: "建木官网测试环境更新完成\\n\\n版本：${node_build.package_version}\\n\\n网址：https://portal.test.jianmu.dev"
       msgtype: "text"
       mentioned_mobile_list: '["18201560161", "18810015728"]'
