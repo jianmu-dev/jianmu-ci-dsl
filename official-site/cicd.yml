@@ -39,18 +39,14 @@ pipeline:
       remote_file: /home/ubuntu/jianmu-official-site
       local_file: ${git_clone.git_path}/dist
   send_message:
-    type: qywx_notice:1.2.0
+    type: qywx_notice:1.2.1-text
     param:
       bot_webhook_url: ((charbot.webhook_url))
-      mentioned_moblie_list: "[]"
       text_content: "建木官网测试环境更新完成\\n\\n版本：${node_build.package_version}\\n\\n网址：https://portal.test.jianmu.dev"
-      msgtype: "text"
       mentioned_mobile_list: '["18881035295", "17772427748"]'
   send_message_ui:
-    type: qywx_notice:1.2.0
+    type: qywx_notice:1.2.1-text
     param:
       bot_webhook_url: ((charbot.ui_webhook_url))
-      mentioned_moblie_list: "[]"
       text_content: "建木官网测试环境更新完成\\n\\n版本：${node_build.package_version}\\n\\n网址：https://portal.test.jianmu.dev"
-      msgtype: "text"
       mentioned_mobile_list: '["18201560161", "18810015728"]'
