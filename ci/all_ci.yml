@@ -65,7 +65,7 @@ workflow:
       - image_build
     param:
       workspace: ${git_clone.git_path}/ui
-      mirror_registry_url: https://registry.npm.taobao.org
+      registry_url: https://registry.npm.taobao.org
   image_build:
     type: docker_image_build:1.0.1
     sources:
