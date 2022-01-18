@@ -42,7 +42,7 @@ pipeline:
     type: qywx_notice:1.2.1
     param:
       bot_webhook_url: ((charbot.webhook_url))
-      mentioned_moblie_list: "[]"
+      mentioned_mobile_list: "[]"
       text_content: "建木CI前端CDN更新完成。\\n\\n版本：${git_clone.git_tag}\\n\\n网址：https://ci.jianmu.dev"
       msgtype: "text"
       mentioned_list: "[]"

@@ -89,7 +89,7 @@ workflow:
       - end
     param:
       bot_webhook_url: ((charbot.webhook_url))
-      mentioned_moblie_list: "[]"
+      mentioned_mobile_list: "[]"
       text_content: "建木CI前/后端docker镜像构建完成。\\n\\n前端：${global.ui_image_name}:${git_clone.git_tag}\\n后端：${global.server_image_name}:${git_clone.git_tag}"
       msgtype: "text"
       mentioned_list: "[]"

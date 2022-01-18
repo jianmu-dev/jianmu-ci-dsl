@@ -153,7 +153,7 @@ workflow:
       - end
     param:
       bot_webhook_url: ((charbot.webhook_url))
-      mentioned_moblie_list: "[]"
+      mentioned_mobile_list: "[]"
       text_content: "建木博客cdn更新完成\\n\\n版本：${git_clone.git_tag}\\n\\n网址：https://blog.jianmu.dev"
       msgtype: "text"
       mentioned_list: "[]"

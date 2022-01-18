@@ -146,7 +146,7 @@ workflow:
     type: qywx_notice:1.2.1
     param:
       bot_webhook_url: ((charbot.webhook_url))
-      mentioned_moblie_list: "[]"
+      mentioned_mobile_list: "[]"
       text_content: "更新ssl证书（${global.domain}）更新完成。"
       msgtype: "text"
       mentioned_list: "[]"
