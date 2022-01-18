@@ -56,7 +56,7 @@ pipeline:
     type: qywx_notice:1.0.0
     param:
       bot_webhook_url: ((charbot.webhook_url))
-      mentioned_moblie_list: "[]"
+      mentioned_mobile_list: "[]"
       text_content: "API网关测试环境更新完成。\\n\\n镜像：${global.image_name}:${node_build.package_name}-${node_build.package_version}"
       msgtype: "text"
       mentioned_list: "[]"

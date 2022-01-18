@@ -72,7 +72,6 @@ pipeline:
     type: qywx_notice:1.1.0
     param:
       bot_webhook_url: ((charbot.webhook_url))
-      mentioned_moblie_list: "[]"
       text_content: "建木Hub服务端测试环境更新完成。\\n\\n版本：${maven_jib_build.version}\\n\\n网址：https://hub.test.jianmu.dev\\n\\n请验收功能。"
       msgtype: "text"
       mentioned_mobile_list: '["15223806815", "15320260902"]'

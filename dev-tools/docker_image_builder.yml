@@ -21,7 +21,7 @@ pipeline:
     type: qywx_notice:1.0.0
     param:
       bot_webhook_url: ((charbot.webhook_url))
-      mentioned_moblie_list: "[]"
+      mentioned_mobile_list: "[]"
       text_content: "建木dev-tools测试环境更新完成"
       msgtype: "text"
       mentioned_list: "[]"
