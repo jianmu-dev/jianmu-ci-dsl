@@ -8,7 +8,7 @@ global:
 
 trigger:
   type: cron
-  schedule: 0 0 12 5 * ? *
+  schedule: 0 0 12 3 * ? *
 
 workflow:
   start:
