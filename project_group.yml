@@ -38,4 +38,5 @@ groups:
       - /ssl/jianmu.dev_cd.yml
       - /ssl/*.jianmu.dev_cd.yml
       - /ssl/*.test.jianmu.dev_cd.yml
+      - /ssl/*.internal.jianmu.dev_cd.yml
 
