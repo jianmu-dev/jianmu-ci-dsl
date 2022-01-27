@@ -8,6 +8,8 @@ pipeline:
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-cla.git
       ref: refs/tags/v0.0.1
+      username: ((gitee.username))
+      password: ((gitee.password))
   node_build:
     type: nodejs_build:1.2.1-16.13.0
     param:
