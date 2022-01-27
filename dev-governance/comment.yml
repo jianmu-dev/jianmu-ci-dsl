@@ -1,0 +1,38 @@
+name: 自动评论pr
+description: 自动评论pr
+
+trigger:
+  type: webhook
+  param:
+    - name: pull_url
+      type: STRING
+      exp: $.body.json.url
+    - name: action
+      type: STRING
+      exp: $.body.json.action
+    - name: username
+      type: STRING
+      exp: $.body.json.pull_request.user.login
+    - name: nickname
+      type: STRING
+      exp: $.body.json.pull_request.user.name
+  only: (${trigger.action} === "open")
+
+pipeline:
+  pr_comment:
+    type: gitee:1.0.1-pr-comment
+    param:
+      access_token: ((gitee.huangxi_token))
+      pr_url: ${trigger.pull_url}
+      comment_body: |
+        感谢您申请加入建木社区。看起来这可能是您第一次对建木开源项目贡献。
+        您需要先签署贡献者许可协议(CLA)。请访问 https://cla.test.jianmu.dev/ 进行签署。
+        签署后，请在此处回复(例如：我已签署)，我们将进行[验证](https://cla.test.jianmu.dev/check/${trigger.username})。谢谢。
+  send_message:
+    type: qywx_notice:1.2.1
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_mobile_list: "[]"
+      text_content: "贡献者申请加入。\\n\\n昵称：${trigger.nickname}\\n用户名：${trigger.username}\\npr链接：${trigger.pull_url}"
+      msgtype: "text"
+      mentioned_list: "[]"
