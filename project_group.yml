@@ -10,9 +10,9 @@ groups:
       - /ci/ui_cd.yml
   - name: 建木CLA
     projects:
-      - /ci/all_ci.yml
-#      - /ci/server_cd.yml
-#      - /ci/ui_cd.yml
+      - /cla/all_ci.yml
+#      - /cla/server_cd.yml
+#      - /cla/ui_cd.yml
   - name: 建木Hub
     projects:
       # 建木API网关
