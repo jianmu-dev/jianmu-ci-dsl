@@ -1,0 +1,99 @@
+name: 构建建木CLA前/后端docker镜像
+description: 构建建木CLA前/后端docker镜像
+
+trigger:
+  type: webhook
+  param:
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
+    - name: gitee_event
+      type: STRING
+      exp: $.header.X-Gitee-Event
+    - name: gitee_tag_created
+      type: BOOL
+      exp: $.body.json.created
+    - name: gitee_ref
+      type: STRING
+      exp: $.body.json.ref
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
+  only: (${trigger.gitee_event} === "Tag Push Hook" && ${trigger.gitee_tag_created})
+
+global:
+  param:
+    ui_image_name: jianmudev/jianmu-cla-ui
+    server_image_name: jianmudev/jianmu-cla-server
+
+workflow:
+  start:
+    type: start
+    targets:
+      - git_clone
+  git_clone:
+    type: git_clone:1.2.0
+    sources:
+      - start
+    targets:
+      - maven_jib_build
+      - node_build
+    param:
+      remote_url: https://gitee.com/jianmu-dev/jianmu-cla.git
+      ref: ${trigger.gitee_ref}
+      username: ((gitee.username))
+      password: ((gitee.password))
+  maven_jib_build:
+    type: maven_build:1.3.1-jdk11
+    sources:
+      - git_clone
+    targets:
+      - send_message
+    param:
+      mvn_action: install
+      workspace: ${git_clone.git_path}
+      image_name: ${global.server_image_name}
+      image_tag: ${git_clone.git_tag}
+      docker_username: ((dockerhub.username))
+      docker_password: ((dockerhub.password))
+      maven_public_url: https://nexus.jianmu.dev/repository/maven-public/
+  node_build:
+    type: nodejs_build:1.2.1-14.16.1
+    sources:
+      - git_clone
+    targets:
+      - image_build
+    param:
+      workspace: ${git_clone.git_path}/ui
+      registry_url: https://registry.npm.taobao.org
+  image_build:
+    type: docker_image_build:1.0.1
+    sources:
+      - node_build
+    targets:
+      - send_message
+    param:
+      docker_username: ((dockerhub.username))
+      docker_password: ((dockerhub.password))
+      image_name: ${global.ui_image_name}
+      image_tag: ${git_clone.git_tag}
+      docker_file: Dockerfile
+      docker_build_path: .
+      workspace: ${git_clone.git_path}/ui
+  send_message:
+    type: qywx_notice:1.2.1
+    sources:
+      - maven_jib_build
+      - image_build
+    targets:
+      - end
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_mobile_list: "[]"
+      text_content: "建木CLA前/后端docker镜像构建完成。\\n\\n前端：${global.ui_image_name}:${git_clone.git_tag}\\n后端：${global.server_image_name}:${git_clone.git_tag}"
+      msgtype: "text"
+      mentioned_list: "[]"
+  end:
+    type: end
+    sources:
+      - send_message
