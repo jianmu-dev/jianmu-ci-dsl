@@ -1,0 +1,55 @@
+# 部署生产，通过上游打镜像流程，触发（结合chat-ops）
+name: 建木CLA服务端生产环境CD
+description: 建木CLA服务端生产环境CD
+
+global:
+  param:
+    image_name: jianmudev/jianmu-cla
+    image_tag: v0.0.1
+
+pipeline:
+  deploy_server:
+    type: ssh_cmd:1.0.1
+    param:
+      ssh_ip: 192.168.20.16
+      ssh_private_key: ((private_key.ciserver))
+      ssh_cmd: >-
+        docker images
+        &&
+        docker ps
+        &&
+        cd /root/jianmu-cla
+        &&
+        source ./.env
+        &&
+        echo source version: $cla_version
+        &&
+        echo target version: ${global.image_tag}
+        &&
+        docker-compose stop cla
+        &&
+        docker-compose rm -vf cla
+        &&
+        docker rmi ${global.image_name}:$cla_version
+        &&
+        cp .env .env.$(date +'%Y-%m-%d_%H:%M:%S')
+        &&
+        sed -i '/^cla_version=/d' .env
+        &&
+        echo cla_version=${global.image_tag} >> .env
+        &&
+        docker-compose up -d cla
+        &&
+        docker images
+        &&
+        docker ps
+        &&
+        echo done
+  send_message:
+    type: qywx_notice:1.2.1
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_mobile_list: "[]"
+      text_content: "建木CLA服务端生产环境更新完成。\\n\\n版本：${global.image_tag}\\n\\n网址：https://cla.jianmu.dev"
+      msgtype: "text"
+      mentioned_list: "[]"

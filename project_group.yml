@@ -11,7 +11,7 @@ groups:
   - name: 建木CLA
     projects:
       - /cla/all_ci.yml
-#      - /cla/server_cd.yml
+      - /cla/server_cd.yml
       - /cla/ui_cd.yml
   - name: 建木Hub
     projects:
