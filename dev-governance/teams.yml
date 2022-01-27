@@ -1,9 +1,6 @@
 name: 构建组织列表
 description: 构建组织列表
 
-global:
-  enabled: false
-
 trigger:
   type: webhook
   param:
