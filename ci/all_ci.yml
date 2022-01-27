@@ -1,5 +1,5 @@
 name: 构建建木CI前/后端docker镜像
-description: 构建建木CI服务端docker镜像
+description: 构建建木CI前/后端docker镜像
 
 trigger:
   type: webhook
