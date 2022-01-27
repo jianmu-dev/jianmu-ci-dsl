@@ -58,7 +58,7 @@ workflow:
       docker_password: ((dockerhub.password))
       maven_public_url: https://nexus.jianmu.dev/repository/maven-public/
   node_build:
-    type: nodejs_build:1.2.1-14.16.1
+    type: nodejs_build:1.2.1-16.13.0
     sources:
       - git_clone
     targets:
