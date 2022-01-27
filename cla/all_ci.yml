@@ -24,7 +24,7 @@ trigger:
 global:
   param:
     ui_image_name: jianmudev/jianmu-cla-ui
-    server_image_name: jianmudev/jianmu-cla-server
+    image_name: jianmudev/jianmu-cla
 
 workflow:
   start:
@@ -52,7 +52,7 @@ workflow:
     param:
       mvn_action: install
       workspace: ${git_clone.git_path}
-      image_name: ${global.server_image_name}
+      image_name: ${global.image_name}
       image_tag: ${git_clone.git_tag}
       docker_username: ((dockerhub.username))
       docker_password: ((dockerhub.password))
@@ -90,7 +90,7 @@ workflow:
     param:
       bot_webhook_url: ((charbot.webhook_url))
       mentioned_mobile_list: "[]"
-      text_content: "建木CLA前/后端docker镜像构建完成。\\n\\n前端：${global.ui_image_name}:${git_clone.git_tag}\\n后端：${global.server_image_name}:${git_clone.git_tag}"
+      text_content: "建木CLA前/后端docker镜像构建完成。\\n\\n前端：${global.ui_image_name}:${git_clone.git_tag}\\n后端：${global.image_name}:${git_clone.git_tag}"
       msgtype: "text"
       mentioned_list: "[]"
   end:
