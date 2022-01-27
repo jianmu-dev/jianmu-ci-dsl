@@ -22,6 +22,9 @@ trigger:
   only: (${trigger.gitee_event} === "Tag Push Hook" && ${trigger.gitee_tag_created})
 
 global:
+  # TODO 待删除
+  enabled:
+    mutable: true
   param:
     ui_image_name: jianmudev/jianmu-cla-ui
     image_name: jianmudev/jianmu-cla
