@@ -23,9 +23,9 @@ workflow:
     type: acme_ssl_aliyun:1.0.1
     param:
       wget_use: true
-      ali_key: ((ali.jianmu_dev_key))
+      ali_key: ((ali.opencla_org_key))
       domain: ${global.domain}
-      ali_secret: ((ali.jianmu_dev_secret))
+      ali_secret: ((ali.opencla_org_secret))
       dns_check: true
       email: dev@jianmu.dev
   scp_cert:
