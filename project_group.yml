@@ -50,6 +50,7 @@ groups:
       # jianmuhub.com
       - /ssl/jianmuhub.com/@_cd.yml
       - /ssl/jianmuhub.com/*_cd.yml
+      - /ssl/jianmuhub.com/*.internal_cd.yml
       # dghub.cn
 #      - /ssl/dghub.cn/*_cd.yml
 
