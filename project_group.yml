@@ -45,5 +45,5 @@ groups:
       - /ssl/*.test.jianmu.dev_cd.yml
       - /ssl/*.internal.jianmu.dev_cd.yml
       - /ssl/*.opencla.org_cd.yml
-      - /ssl/*.dghub.cn_cd.yml
+#      - /ssl/*.dghub.cn_cd.yml
 
