@@ -47,6 +47,9 @@ groups:
       - /ssl/jianmu.dev/*.internal_cd.yml
       # opencla.org
       - /ssl/opencla.org/*_cd.yml
+      # jianmuhub.com
+      - /ssl/jianmuhub.com/@_cd.yml
+      - /ssl/jianmuhub.com/*_cd.yml
       # dghub.cn
 #      - /ssl/dghub.cn/*_cd.yml
 
