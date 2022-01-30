@@ -40,10 +40,13 @@ groups:
       - /blog/cicd.yml
   - name: SSL证书
     projects:
-      - /ssl/jianmu.dev_cd.yml
-      - /ssl/*.jianmu.dev_cd.yml
-      - /ssl/*.test.jianmu.dev_cd.yml
-      - /ssl/*.internal.jianmu.dev_cd.yml
-      - /ssl/*.opencla.org_cd.yml
-#      - /ssl/*.dghub.cn_cd.yml
+      # jianmu.dev
+      - /ssl/jianmu.dev/@_cd.yml
+      - /ssl/jianmu.dev/*_cd.yml
+      - /ssl/jianmu.dev/*.test_cd.yml
+      - /ssl/jianmu.dev/*.internal_cd.yml
+      # opencla.org
+      - /ssl/opencla.org/*_cd.yml
+      # dghub.cn
+#      - /ssl/dghub.cn/*_cd.yml
 
