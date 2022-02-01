@@ -37,14 +37,15 @@ pipeline:
   deploy_server:
     type: ssh_cmd:1.0.1
     param:
-      ssh_ip: 8.140.50.113
-      ssh_private_key: ((private_key.aliserver))
+      ssh_ip: 172.16.101.254
+      ssh_user: ubuntu
+      ssh_private_key: ((private_key.254))
       ssh_cmd: >-
         docker images
         &&
         docker ps
         &&
-        cd /root/jianmu-hub-deploy/api-gateway
+        cd /home/ubuntu/api-gateway
         &&
         docker pull ${global.image_name}:${global.image_tag_prefix}-${git_clone.git_tag}
         &&
