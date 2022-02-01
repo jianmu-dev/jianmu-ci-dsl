@@ -58,11 +58,11 @@ pipeline:
       ssh_private_key: ((private_key.254))
       remote_file: /home/ubuntu/qr-code-login-page/qr_code_login/index.html
       local_file: ${git_clone.git_path}/build/index.html
-#  send_message:
-#    type: qywx_notice:1.2.1
-#    param:
-#      bot_webhook_url: ((charbot.webhook_url))
-#      mentioned_mobile_list: "[]"
-#      text_content: "建木二维码登录CDN更新完成。\\n\\n版本：${git_clone.git_tag}"
-#      msgtype: "text"
-#      mentioned_list: "[]"
+  send_message:
+    type: qywx_notice:1.2.1
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_mobile_list: "[]"
+      text_content: "建木二维码登录CDN更新完成。\\n\\n版本：${git_clone.git_tag}"
+      msgtype: "text"
+      mentioned_list: "[]"
