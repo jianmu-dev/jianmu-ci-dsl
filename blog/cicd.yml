@@ -64,6 +64,7 @@ workflow:
       - git_clone_wrapper
     param:
       workspace: ${git_clone.git_path}
+      registry_url: https://registry.npm.taobao.org
       build_arg: --mode prod
   qiniu_upload:
     type: qiniu_upload:1.0.3

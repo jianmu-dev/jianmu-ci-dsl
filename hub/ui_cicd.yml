@@ -33,6 +33,7 @@ pipeline:
     type: nodejs_build:1.2.1-14.16.1
     param:
       workspace: ${git_clone.git_path}
+      registry_url: https://registry.npm.taobao.org
       build_arg: --mode cdn
   qiniu_upload:
     type: qiniu_upload:1.0.3

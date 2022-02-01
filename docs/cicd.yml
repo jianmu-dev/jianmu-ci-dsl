@@ -47,6 +47,7 @@ workflow:
       - confirm_version
     param:
       workspace: ${git_clone.git_path}
+      registry_url: https://registry.npm.taobao.org
       build_arg: --mode cdn
   confirm_version:
     type: string:1.0.0-nodejs16.13.1
