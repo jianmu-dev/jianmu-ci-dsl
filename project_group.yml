@@ -28,3 +28,11 @@ groups:
       - /official-site/cicd.yml
       # 建木博客
       - /blog/cicd.yml
+  - name: 建木开源治理：jianmu-dev
+    projects:
+      # 自动评论pr
+      - /dev-governance/comment.yml
+      # 构建贡献者列表
+      - /dev-governance/contributors.yml
+      # 构建组织列表
+      - /dev-governance/teams.yml

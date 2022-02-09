@@ -1,0 +1,77 @@
+name: 构建组织列表
+description: 构建组织列表
+
+trigger:
+  type: webhook
+  param:
+    - name: gitee_event
+      type: STRING
+      exp: $.header.X-Gitee-Event
+    - name: git_ref
+      type: STRING
+      exp: $.body.json.ref
+  only: (${trigger.gitee_event} == "Push Hook" && ${trigger.git_ref} == "refs/heads/master")
+
+workflow:
+  start:
+    type: start
+    targets:
+      - git_clone
+  git_clone:
+    type: git_clone:1.2.0
+    sources:
+      - start
+    targets:
+      - teams
+    param:
+      remote_url: https://gitee.com/green-grassland-hx/governance.git
+  teams:
+    type: teams_build:1.0.0-gitee
+    sources:
+      - git_clone
+    targets:
+      - git_push
+      - sync_teams_jsonfile
+    param:
+      teams_dir: ${git_clone.git_path}/teams
+      contributors_json_filepath: ${git_clone.git_path}/data/contributors.json
+  git_push:
+    type: git_push:1.0.2
+    sources:
+      - teams
+    targets:
+      - send_message
+    param:
+      ssh_key: ((gitee.huangxi_key))
+      remote_url: git@gitee.com:green-grassland-hx/governance.git
+      source_path: ${teams.teams_json_filepath}
+      target_dir: governance/data
+      commit_message: "refactor: teams.json"
+  sync_teams_jsonfile:
+    sources:
+      - teams
+    targets:
+      - send_message
+    type: scp_resouce:1.1.0
+    param:
+      ssh_ip: 172.20.148.144
+      ssh_private_key: ((144key.ssh_rsa))
+      remote_file: /tmp/hx/json/teams.json
+      local_file: ${teams.teams_json_filepath}
+  send_message:
+    sources:
+      - git_push
+      - sync_teams_jsonfile
+    targets:
+      - end
+    type: qywx_notice:1.2.1
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_mobile_list: "[]"
+      text_content: "团队已同步更新"
+      msgtype: "text"
+      mentioned_list: "[]"
+  end:
+    type: end
+    sources:
+      - send_message
