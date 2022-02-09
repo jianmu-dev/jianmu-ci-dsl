@@ -59,7 +59,7 @@ workflow:
     param:
       expression: '"v" + "${git_clone.git_tag}".substring(0, "${git_clone.git_tag}".indexOf("."))'
   qiniu_upload:
-    type: qiniu_upload:1.0.3
+    type: qiniu:1.0.0-file-upload
     sources:
       - confirm_version
     targets:
@@ -99,7 +99,7 @@ workflow:
       - yarn install
       - yarn build --mode cdn
   qiniu_upload_wrapper:
-    type: qiniu_upload:1.0.3
+    type: qiniu:1.0.0-file-upload
     sources:
       - node_build_wrapper
     targets:

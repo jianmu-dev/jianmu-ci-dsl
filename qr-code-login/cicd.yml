@@ -35,7 +35,7 @@ pipeline:
       workspace: ${git_clone.git_path}
       registry_url: https://registry.npm.taobao.org
   qiniu_upload:
-    type: qiniu_upload:1.0.3
+    type: qiniu:1.0.0-file-upload
     param:
       qiniu_bucket: jianmu
       qiniu_ak: ((qiniu.AccessKey))

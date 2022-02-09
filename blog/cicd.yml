@@ -67,7 +67,7 @@ workflow:
       registry_url: https://registry.npm.taobao.org
       build_arg: --mode prod
   qiniu_upload:
-    type: qiniu_upload:1.0.3
+    type: qiniu:1.0.0-file-upload
     sources:
       - node_build
     targets:
@@ -109,7 +109,7 @@ workflow:
       - yarn install
       - yarn build --mode cdn
   qiniu_upload_wrapper:
-    type: qiniu_upload:1.0.3
+    type: qiniu:1.0.0-file-upload
     sources:
       - node_build_wrapper
     targets:
