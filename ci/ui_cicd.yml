@@ -17,13 +17,13 @@ trigger:
     - name: pr_target_branch
       type: STRING
       exp: $.body.json.target_branch
-    - name: pr_label
+    - name: source_repo_owner_name
       type: STRING
-      exp: $.body.json.pull_request.head.label
+      exp: $.body.json.source_repo.project.owner.name
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged" && (${trigger.pr_label} == "老技:master" || ${trigger.pr_label} == "冯浩:master" || ${trigger.pr_label} == "comyan:master"))
+  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged" && (${trigger.source_repo_owner_name} == "老技" || ${trigger.source_repo_owner_name} == "冯浩" || ${trigger.source_repo_owner_name} == "comyan"))
 
 pipeline:
   git_clone_ui:
