@@ -1,13 +1,12 @@
-# 部署生产，通过上游打镜像流程，触发（结合chat-ops）
-name: 建木CI前端CDN CD hotfix.1
-description: 建木CI前端CDN CD hotfix.1
+name: 建木CI前端CDN CD 2.2.0-hotfix.1
+description: 建木CI前端CDN CD 2.2.0-hotfix.1
 
 pipeline:
   git_clone:
     type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/liamjung/jianmu-ci-server.git
-      ref: refs/heads/temp
+      ref: refs/heads/2.2.0-hotfix.1
       username: ((gitee_lj.username))
       password: ((gitee_lj.password))
   node_build:
