@@ -4,7 +4,7 @@ description: 建木博客CDN CI/CD
 global:
   param:
     package_name: jianmu-blog
-    cdn_base_url: https://cdn.jianmu.run
+    cdn_base_url: https://jianmu-blog.assets.dghub.cn
 
 trigger:
   type: webhook

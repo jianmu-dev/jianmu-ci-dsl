@@ -3,7 +3,7 @@ description: 建木文档CDN CI/CD
 
 global:
   param:
-    cdn_base_url: https://cdn.jianmu.run
+    cdn_base_url: https://jianmu-docs.assets.dghub.cn
 
 trigger:
   type: webhook
