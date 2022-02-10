@@ -51,6 +51,8 @@ groups:
       - /ssl/jianmuhub.com/@_cd.yml
       - /ssl/jianmuhub.com/*_cd.yml
       - /ssl/jianmuhub.com/*.internal_cd.yml
+  - name: CDN SSL证书
       # dghub.cn
-#      - /ssl/dghub.cn/*_cd.yml
+      - /ssl/dghub.cn/*.assets_cd.yml
+      - /ssl/dghub.cn/*.img_cd.yml
 
