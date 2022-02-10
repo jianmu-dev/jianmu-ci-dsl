@@ -56,4 +56,5 @@ groups:
       # dghub.cn
       - /ssl/dghub.cn/*.assets_cd.yml
       - /ssl/dghub.cn/*.img_cd.yml
+      - /ssl/dghub.cn/cdn.test_cd.yml
 
