@@ -59,7 +59,7 @@ workflow:
       image_tag: ${git_clone.git_tag}
       docker_username: ((dockerhub.username))
       docker_password: ((dockerhub.password))
-      maven_public_url: https://nexus.jianmu.dev/repository/maven-public/
+      maven_public_url: https://nexus.internal.jianmu.dev/repository/maven-public/
   node_build:
     type: nodejs_build:1.2.1-16.13.0
     sources:
