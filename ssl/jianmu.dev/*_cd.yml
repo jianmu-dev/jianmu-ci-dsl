@@ -4,7 +4,6 @@ global:
   param:
     domain: "*.jianmu.dev"
     ssl_dir: /etc/nginx/ssl/_.jianmu.dev
-    ssl_dir_nexus: /mnt/nginx/cert
     ssl_dir_test_env: /home/ubuntu/ssl/_.jianmu.dev
 
 trigger:
@@ -22,8 +21,6 @@ workflow:
     targets:
       - scp_cert
       - scp_key
-      - scp_cert_nexus
-      - scp_key_nexus
       - scp_cert_test_env
       - scp_key_test_env
     type: acme_ssl_aliyun:1.0.1
@@ -67,39 +64,6 @@ workflow:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
       ssh_cmd: systemctl restart nginx
-  scp_cert_nexus:
-    sources:
-      - acme_ssl_aliyun
-    targets:
-      - restart_nexus_nginx
-    type: scp_resouce:1.1.0
-    param:
-      ssh_ip: 172.20.150.5
-      ssh_private_key: ((private_key.nexus))
-      remote_file: ${global.ssl_dir_nexus}/fullchain.cer
-      local_file: ${acme_ssl_aliyun.cer_path}
-  scp_key_nexus:
-    sources:
-      - acme_ssl_aliyun
-    targets:
-      - restart_nexus_nginx
-    type: scp_resouce:1.1.0
-    param:
-      ssh_ip: 172.20.150.5
-      ssh_private_key: ((private_key.nexus))
-      remote_file: ${global.ssl_dir_nexus}/private.key
-      local_file: ${acme_ssl_aliyun.key_path}
-  restart_nexus_nginx:
-    sources:
-      - scp_cert_nexus
-      - scp_key_nexus
-    targets:
-      - send_message
-    type: ssh_cmd:1.0.1
-    param:
-      ssh_ip: 172.20.150.5
-      ssh_private_key: ((private_key.nexus))
-      ssh_cmd: docker restart docker-compose_nginx_1
   scp_cert_test_env:
     sources:
       - acme_ssl_aliyun
@@ -139,7 +103,6 @@ workflow:
   send_message:
     sources:
       - ssh_cmd
-      - restart_nexus_nginx
       - restart_nginx_test_env
     targets:
       - end

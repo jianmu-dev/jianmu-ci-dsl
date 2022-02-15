@@ -3,7 +3,7 @@ name: 更新ssl证书：*.internal.jianmu.dev
 global:
   param:
     domain: "*.internal.jianmu.dev"
-    ssl_dir: /etc/nginx/ssl/_.internal.jianmu.dev
+    ssl_dir_nexus: /home/ubuntu/ssl/_.internal.jianmu.dev
     ssl_dir_internal_env: /home/ubuntu/ssl/_.internal.jianmu.dev
 
 trigger:
@@ -19,6 +19,8 @@ workflow:
     sources:
       - start
     targets:
+      - scp_cert_nexus
+      - scp_key_nexus
       - scp_cert_internal_env
       - scp_key_internal_env
     type: acme_ssl_aliyun:1.0.1
@@ -29,6 +31,42 @@ workflow:
       ali_secret: ((ali.jianmu_dev_secret))
       dns_check: true
       email: dev@jianmu.dev
+  scp_cert_nexus:
+    sources:
+      - acme_ssl_aliyun
+    targets:
+      - restart_nginx_nexus
+    type: scp_resouce:1.1.0
+    param:
+      ssh_ip: 172.16.101.232
+      ssh_user: ubuntu
+      ssh_private_key: ((private_key.232))
+      remote_file: ${global.ssl_dir_nexus}/fullchain.cer
+      local_file: ${acme_ssl_aliyun.cer_path}
+  scp_key_nexus:
+    sources:
+      - acme_ssl_aliyun
+    targets:
+      - restart_nginx_nexus
+    type: scp_resouce:1.1.0
+    param:
+      ssh_ip: 172.16.101.232
+      ssh_user: ubuntu
+      ssh_private_key: ((private_key.232))
+      remote_file: ${global.ssl_dir_nexus}/private.key
+      local_file: ${acme_ssl_aliyun.key_path}
+  restart_nginx_nexus:
+    sources:
+      - scp_cert_nexus
+      - scp_key_nexus
+    targets:
+      - send_message
+    type: ssh_cmd:1.0.1
+    param:
+      ssh_ip: 172.16.101.232
+      ssh_user: ubuntu
+      ssh_private_key: ((private_key.232))
+      ssh_cmd: sudo systemctl restart nginx
   scp_cert_internal_env:
     sources:
       - acme_ssl_aliyun
@@ -67,6 +105,7 @@ workflow:
       ssh_cmd: sudo systemctl restart nginx
   send_message:
     sources:
+      - restart_nginx_nexus
       - restart_nginx_internal_env
     targets:
       - end
