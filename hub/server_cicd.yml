@@ -41,7 +41,7 @@ pipeline:
       image_tag: ${global.image_tag_prefix}-${global.image_tag_suffix}
       docker_username: ((dockerhub.username))
       docker_password: ((dockerhub.password))
-      maven_public_url: https://nexus.jianmu.dev/repository/maven-public/
+      maven_public_url: https://nexus.internal.jianmu.dev/repository/maven-public/
       vc_pom_dir: web
   deploy_server:
     type: ssh_cmd:1.0.0
