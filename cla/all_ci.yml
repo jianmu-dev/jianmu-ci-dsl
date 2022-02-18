@@ -42,7 +42,7 @@ workflow:
       - maven_jib_build
       - node_build
     param:
-      remote_url: https://gitee.com/jianmu-dev/jianmu-cla.git
+      remote_url: https://gitee.com/jianmu-dev/opencla.git
       ref: ${trigger.gitee_ref}
       username: ((gitee.username))
       password: ((gitee.password))
