@@ -7,7 +7,7 @@ pipeline:
     type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-ci-server.git
-      ref: refs/tags/v2.2.2
+      ref: refs/tags/v2.2.3
   node_build:
     type: nodejs_build:1.2.1-14.16.1
     param:
