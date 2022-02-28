@@ -14,7 +14,7 @@ trigger:
     - name: pr_target_branch
       type: STRING
       exp: $.body.json.target_branch
-    auth:
+  auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
   # 触发器执行规则，为true时执行流程
