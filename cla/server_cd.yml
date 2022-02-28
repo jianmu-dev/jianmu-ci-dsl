@@ -5,7 +5,7 @@ description: 建木CLA服务端生产环境CD
 global:
   param:
     image_name: jianmudev/jianmu-cla
-    image_tag: v0.0.10
+    image_tag: v0.0.11
 
 pipeline:
   deploy_server:
