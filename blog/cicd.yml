@@ -24,7 +24,7 @@ pipeline:
   git_clone:
     type: git_clone:1.2.0
     param:
-      remote_url: https://gitee.com/qbhfh/jianmu-blog.git
+      remote_url: https://gitee.com/jianmu-dev/jianmu-blog.git
       ref: refs/heads/master
 
   # shell节点
