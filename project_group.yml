@@ -59,4 +59,10 @@ groups:
       - /ssl/dghub.cn/*.assets_cd.yml
       - /ssl/dghub.cn/*.img_cd.yml
       - /ssl/dghub.cn/cdn.test_cd.yml
+  - name: 建木开源治理：jianmu-dev
+    projects:
+      # 个人申请
+      - /dev-governance/apply.yml
+      # 构建贡献者列表
+      - /dev-governance/contributors.yml
 

@@ -1,0 +1,126 @@
+name: 构建贡献者列表
+description: 构建贡献者列表
+
+trigger:
+  type: webhook
+  param:
+    - name: username
+      type: STRING
+      exp: $.body.json.pull_request.user.login
+    - name: nickname
+      type: STRING
+      exp: $.body.json.pull_request.user.name
+    - name:  avatar_url
+      type: STRING
+      exp: $.body.json.pull_request.user.avatar_url
+    - name: action
+      type: STRING
+      exp: $.body.json.action
+    - name: pr_url
+      type: STRING
+      exp: $.body.json.url
+    - name: email
+      type: STRING
+      exp: $.body.json.pull_request.user.email
+    - name: org_name
+      type: STRING
+      exp: $.body.json.project.namespace
+    - name: exit
+      type: NUMBER
+      exp: $.body.json.pull_request.additions
+    - name: clone_url
+      type: STRING
+      exp: $.body.json.project.clone_url
+  only: (${trigger.action} === "merge")
+
+workflow:
+  start:
+    type: start
+    targets:
+      - git_clone
+  git_clone:
+    type: git_clone:1.2.0
+    sources:
+      - start
+    targets:
+      - contributors
+    param:
+      remote_url: ${trigger.clone_url}
+  contributors:
+    type: contributors_build:1.0.0-gitee
+    sources:
+      - git_clone
+    targets:
+      - git_push
+      - sync_contributors_jsonfile
+    param:
+      json_filepath: ${git_clone.git_path}/data/contributors.json
+      username: ${trigger.username}
+      nickname: ${trigger.nickname}
+      avatar_url: ${trigger.avatar_url}
+      pr_url: ${trigger.pr_url}
+      email: ${trigger.email}
+  git_push:
+    type: git_push:1.0.2
+    sources:
+      - contributors
+    targets:
+      - condition
+    param:
+      username: ((gitee.jianmubot_username))
+      password: ((gitee.jianmubot_password))
+      remote_url: ${trigger.clone_url}
+      source_path: ${contributors.contributors_json_filepath}
+      target_dir: governance/data
+      commit_message: "refactor: contributors.json"
+  sync_contributors_jsonfile:
+    sources:
+      - contributors
+    targets:
+      - condition
+    type: scp_resouce:1.1.0
+    param:
+      ssh_ip: 47.243.164.48
+      ssh_private_key: ((private_key.alixg))
+      remote_file: /home/jianmu-data/contributors.json
+      local_file: ${contributors.contributors_json_filepath}
+
+  condition:
+    sources:
+      - git_push
+      - sync_contributors_jsonfile
+    type: condition
+    expression: ${trigger.exit}==0
+    cases:
+      true: end
+      false: member_add
+
+  member_add:
+    sources:
+      - condition
+    targets:
+      - send_message
+    type: gitee:1.0.0-member-add
+    param:
+      access_token: ((gitee.jianmubot_token))
+      org: ${trigger.org_name}
+      username: ${trigger.username}
+
+  send_message:
+    sources:
+      - member_add
+    targets:
+      - end
+    type: qywx_notice:1.2.1
+    param:
+      bot_webhook_url: ((charbot.webhook_url))
+      mentioned_mobile_list: "[]"
+      text_content: "贡献者已加入。\\n\\n昵称：${trigger.nickname}\\n用户名：${trigger.username}"
+      msgtype: "text"
+      mentioned_list: "[]"
+  end:
+    type: end
+    sources:
+      - condition
+      - send_message
+
