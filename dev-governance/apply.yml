@@ -4,6 +4,9 @@ description: 个人申请
 trigger:
   type: webhook
   param:
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
     - name: pull_url
       type: STRING
       exp: $.body.json.url
@@ -22,6 +25,9 @@ trigger:
     - name: org_name
       type: STRING
       exp: $.body.json.project.namespace
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
   only: (${trigger.action} === "open")
 
 workflow:

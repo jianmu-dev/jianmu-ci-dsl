@@ -4,6 +4,9 @@ description: 构建贡献者列表
 trigger:
   type: webhook
   param:
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
     - name: username
       type: STRING
       exp: $.body.json.pull_request.user.login
@@ -31,6 +34,9 @@ trigger:
     - name: clone_url
       type: STRING
       exp: $.body.json.project.clone_url
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
   only: (${trigger.action} === "merge")
 
 workflow:
