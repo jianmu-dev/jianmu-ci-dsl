@@ -4,6 +4,9 @@ description: 构建贡献者列表
 trigger:
   type: webhook
   param:
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.X-Gitee-Token
     - name: username
       type: STRING
       exp: $.body.json.pull_request.user.login
