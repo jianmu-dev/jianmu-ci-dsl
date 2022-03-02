@@ -61,7 +61,7 @@ workflow:
       pr_url: ${trigger.pr_url}
       email: ${trigger.email}
   git_push:
-    type: git_push:1.0.2
+    type: git_push:1.0.3
     sources:
       - contributors
     targets:
@@ -73,6 +73,8 @@ workflow:
       source_path: ${contributors.contributors_json_filepath}
       target_dir: governance/data
       commit_message: "refactor: contributors.json"
+      committer_name: jianmubot
+      committer_email: dev@jianmu.dev
   sync_contributors_jsonfile:
     sources:
       - contributors
