@@ -22,6 +22,9 @@ trigger:
     - name: org_name
       type: STRING
       exp: $.body.json.project.namespace
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
   only: (${trigger.action} === "open")
 
 workflow:
