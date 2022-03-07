@@ -64,7 +64,7 @@ workflow:
       ssh_user: ubuntu
       ssh_private_key: ((private_key.236))
       ssh_cmd: >-
-        cd /home/ubuntu/registry
+        cd /home/ubuntu/mirror
         &&
         docker-compose restart registry
   send_message:
