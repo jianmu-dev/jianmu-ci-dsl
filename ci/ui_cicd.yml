@@ -48,8 +48,8 @@ pipeline:
   ssh_cmd:
     type: ssh_cmd:1.0.1
     param:
-      ssh_ip: 172.20.148.86
-      ssh_private_key: ((jianmu_ci.server_private_key))
+      ssh_ip: 172.20.149.21
+      ssh_private_key: ((jianmu_ci.server_private_key_dai))
       ssh_cmd: >-
         docker images
         &&
