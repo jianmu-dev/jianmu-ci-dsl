@@ -3,7 +3,8 @@ description: 建木CI前端测试环境 CI/CD
 
 global:
   param:
-    image_name: jianmudev/jianmu-ci-ui
+    image_name: docker-reg.test.jianmu.dev/jianmudev/jianmu-ci-ui
+    mirror_name: docker.mirror.jianmu.dev/jianmudev/jianmu-ci-ui
 
 trigger:
   type: webhook
@@ -67,7 +68,7 @@ pipeline:
         &&
         docker-compose rm -vf web
         &&
-        docker rmi ${global.image_name}:$web_version
+        docker rmi ${global.mirror_name}:$web_version
         &&
         cp .env .env.$(date +'%Y-%m-%d_%H:%M:%S')
         &&
