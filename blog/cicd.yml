@@ -51,7 +51,7 @@ pipeline:
       ssh_ip: 172.20.148.16
       ssh_user: root
       ssh_private_key: ((private_key.172_20_148_16))
-      remote_file: /home/qbhfh/jianmu-blog
+      remote_file: /root/nginx/html
       local_file: ${git_clone.git_path}/public
 
       # 信息通知-企业微信通知
