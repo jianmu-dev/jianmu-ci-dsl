@@ -10,9 +10,9 @@ trigger:
     - name: pull_url
       type: STRING
       exp: $.body.json.url
-    - name: action
+    - name: pr_state
       type: STRING
-      exp: $.body.json.action
+      exp: $.body.json.pull_request.state
     - name: username
       type: STRING
       exp: $.body.json.pull_request.user.login
@@ -40,7 +40,7 @@ trigger:
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  only: (${trigger.action} === "open")
+  only: (${trigger.pr_state} === "open")
 
 workflow:
   start:
