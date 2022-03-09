@@ -25,6 +25,18 @@ trigger:
     - name: org_name
       type: STRING
       exp: $.body.json.project.namespace
+    - name: clone_url
+      type: STRING
+      exp: $.body.json.project.clone_url
+    - name: commit_id
+      type: STRING
+      exp: $.body.json.pull_request.head.sha
+    - name: pr_num
+      type: NUMBER
+      exp: $.body.json.number
+    - name: commit_num
+      type: NUMBER
+      exp: $.body.json.pull_request.commits
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
@@ -36,6 +48,7 @@ workflow:
     targets:
       - pr-file-diff
   pr-file-diff:
+    alias: 检测提交文件差异
     type: gitee:1.0.0-pr-file-diff
     sources:
       - start
@@ -45,6 +58,7 @@ workflow:
       access_token: ((gitee.jianmubot_token))
       pr_url: ${trigger.pull_url}
   jsonpath_filepath:
+    alias: 提取提交文件名
     type: jsonpath:1.0.0
     sources:
       - pr-file-diff
@@ -54,6 +68,7 @@ workflow:
       expression: '$.[*].filepath'
       data: ${pr-file-diff.diff}
   string:
+    alias: 构建判断贡献者条件
     type: string:1.0.0-nodejs16.13.1
     sources:
       - jsonpath_filepath
@@ -62,6 +77,7 @@ workflow:
     param:
       expression: '"contributors/${trigger.username}.yml"'
   condition_isUser:
+    alias: 判断是否是贡献者本人
     sources:
       - string
     type: condition
@@ -71,6 +87,7 @@ workflow:
       false: pr_comment_rectify1
 
   pr_comment_rectify1:
+    alias: 贡献者提交pr错误提示
     type: gitee:1.0.1-pr-comment
     sources:
       - condition_isUser
@@ -84,6 +101,7 @@ workflow:
 
 
   jsonpath_status:
+    alias: 判断文件变动状态
     type: jsonpath:1.0.0
     sources:
       - condition_isUser
@@ -94,15 +112,17 @@ workflow:
       data: ${pr-file-diff.diff}
 
   condition_added:
+    alias: 判断贡献者是否是加入操作
     sources:
       - jsonpath_status
     type: condition
     expression: ${jsonpath_status.result}=="added"
     cases:
-      true: pr_comment_tips
+      true: git_clone
       false: condition_deleted
 
   condition_deleted:
+    alias: 判断贡献者是否是退出操作
     sources:
       - condition_added
     type: condition
@@ -112,6 +132,7 @@ workflow:
       false: pr_comment_rectify2
 
   pr_comment_rectify2:
+    alias: 贡献者提交pr错误提示
     type: gitee:1.0.1-pr-comment
     sources:
       - condition_deleted
@@ -124,6 +145,7 @@ workflow:
       comment_body: ${trigger.username}您好，提交的贡献者文件暂不支持修改，pr将自动关闭，谢谢。
 
   pr-merge:
+    alias: 接受贡献者退出申请
     type: gitee:1.0.0-pr-merge
     sources:
       - condition_deleted
@@ -133,6 +155,7 @@ workflow:
       access_token: ((gitee.jianmubot_token))
       pr_url: ${trigger.pull_url}
   remove_org:
+    alias: 将贡献者移除组织
     type: gitee:1.0.0-member-remove
     sources:
       - pr-merge
@@ -143,23 +166,64 @@ workflow:
       org: ${trigger.org_name}
       username: ${trigger.username}
   send_message_exit:
-    type: qywx_notice:1.2.1
+    alias: 贡献者已退出
+    type: feishu_notice_post:1.0.2
     sources:
       - remove_org
     targets:
       - end
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      mentioned_mobile_list: "[]"
-      text_content: "贡献者已退出。\\n\\n昵称：${trigger.nickname}\\n用户名：${trigger.username}"
-      msgtype: "text"
-      mentioned_list: "[]"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 贡献者退出提示
+      msg_text:  贡献者已退出。\n\n昵称：${trigger.nickname}\n用户名：${trigger.username}
 
-
-  pr_comment_tips:
-    type: gitee:1.0.1-pr-comment
+  git_clone:
+    alias: clone贡献者提交的pr
+    type: git_clone:1.2.1
     sources:
       - condition_added
+    targets:
+      - git_log
+    param:
+      remote_url: ${trigger.clone_url}
+      commit_id: ${trigger.commit_id}
+      ref: pull/${trigger.pr_num}/head
+  git_log:
+    alias: 输出git日志
+    type: git_log:1.0.0
+    sources:
+      - git_clone
+    targets:
+      - jsonpath_filepath_get_user_emails
+    param:
+      git_path: ${git_clone.git_path}
+      commit_num: (${trigger.commit_num})
+  jsonpath_filepath_get_user_emails:
+    alias: 提取用户邮箱信息
+    type: jsonpath:1.0.0
+    sources:
+      - git_log
+    targets:
+      - string_format_comment
+    param:
+      expression: $.[*].authorEmailAddress
+      data: ${git_log.git_log}
+
+  string_format_comment:
+    alias: 构建评论内容
+    type: string:1.0.0-nodejs16.13.1
+    sources:
+      - jsonpath_filepath_get_user_emails
+    targets:
+      - pr_comment_tips
+    param:
+      expression: "!('${jsonpath_filepath_get_user_emails.result}'.startsWith('[') && '${jsonpath_filepath_get_user_emails.result}'.endsWith(']'))  ? '1. ' + '${jsonpath_filepath_get_user_emails.result}' + '  [验证](https://jianmu.opencla.org/check?email=' + encodeURIComponent('${jsonpath_filepath_get_user_emails.result}') + ')' : '1. ' + JSON.parse('${jsonpath_filepath_get_user_emails.result}').reduce((pre, cur) => {if (!pre.includes(cur)) {return pre.concat(cur)} else {return pre}}, []).reduce(function (preValue, currentValue, currentIndex, arr) {if (preValue.search('验证') === -1) {preValue = preValue + '  [验证](https://jianmu.opencla.org/check?email=' + encodeURIComponent(preValue) + ')'}return preValue + '\\n' + (currentIndex + 1).toString() + '. ' + currentValue + '  [验证](https://jianmu.opencla.org/check?email=' + encodeURIComponent(currentValue) + ')'})"
+
+  pr_comment_tips:
+    alias: 评论贡献者加入申请pr
+    type: gitee:1.0.1-pr-comment
+    sources:
+      - string_format_comment
     targets:
       - pr-assignee
     param:
@@ -168,10 +232,14 @@ workflow:
       repeatable: false
       comment_body: |
         感谢您申请加入建木社区。看起来这可能是您第一次对建木开源项目贡献。
-        您需要先签署贡献者许可协议(CLA)。请访问 https://jianmu.opencla.org/ 进行签署。
-        签署后，请在此处回复(例如：我已签署)，我们将进行[验证](https://jianmu.opencla.org/check?email=${trigger.email})。谢谢。
+        您需要先签署贡献者许可协议(CLA)。请访问 https://cla.test.jianmu.dev/ 进行签署。
+        签署后，请在此处回复(例如：我已签署)。谢谢。
+
+        需签署CLA邮箱列表：
+        ${string_format_comment.result}
 
   pr-assignee:
+    alias: 指派组织负责人审核pr
     type: gitee:1.0.0-pr-assignee
     sources:
       - pr_comment_tips
@@ -183,17 +251,16 @@ workflow:
       assignees: "ethan-liu,topshare,liamjung"
 
   send_message_join:
-    type: qywx_notice:1.2.1
+    alias: 提醒贡献者加入
+    type: feishu_notice_post:1.0.2
     sources:
       - pr-assignee
     targets:
       - end
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      mentioned_mobile_list: "[]"
-      text_content: "贡献者申请加入。\\n\\n昵称：${trigger.nickname}\\n用户名：${trigger.username}\\npr链接：${trigger.pull_url}"
-      msgtype: "text"
-      mentioned_list: "[]"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 贡献者加入提示
+      msg_text: 贡献者申请加入。\n\n昵称：${trigger.nickname}\n用户名：${trigger.username}\npr链接：${trigger.pull_url}
   end:
     type: end
     sources:
