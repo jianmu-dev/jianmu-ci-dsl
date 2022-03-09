@@ -43,6 +43,7 @@ pipeline:
     type: nodejs_build:1.2.1-16.13.0
     param:
       workspace: ${git_clone.git_path}
+      registry_url: https://registry.npm.taobao.org
 
   # 更新资源-文件替换
   update_resoure:

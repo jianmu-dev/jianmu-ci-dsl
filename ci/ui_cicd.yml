@@ -36,6 +36,7 @@ pipeline:
     type: nodejs_build:1.2.1-14.16.1
     param:
       workspace: ${git_clone_ui.git_path}/ui
+      registry_url: https://registry.npm.taobao.org
   image_build:
     type: docker_image_build:1.0.1
     param:

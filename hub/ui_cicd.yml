@@ -30,6 +30,7 @@ pipeline:
     type: nodejs_build:1.0.0-14.16.1
     param:
       workspace: ${git_clone.git_path}
+      registry_url: https://registry.npm.taobao.org
       build_arg: --mode test
   #  create_dir:
   #    type: ssh_cmd:1.0.0
