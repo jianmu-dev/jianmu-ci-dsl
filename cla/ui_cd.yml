@@ -7,7 +7,7 @@ pipeline:
     type: git_clone:1.2.0
     param:
       remote_url: https://gitee.com/jianmu-dev/opencla.git
-      ref: refs/tags/v0.0.14
+      ref: refs/tags/v0.0.18
       username: ((gitee.username))
       password: ((gitee.password))
   node_build:
