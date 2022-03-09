@@ -3,7 +3,8 @@ description: 建木CI服务端测试环境 CI/CD
 
 global:
   param:
-    image_name: jianmudev/jianmu-ci-server
+    image_name: docker-reg.test.jianmu.dev/jianmudev/jianmu-ci-server
+    mirror_name: docker.mirror.jianmu.dev/jianmudev/jianmu-ci-server
 
 trigger:
   type: webhook
@@ -33,6 +34,20 @@ pipeline:
       ref: refs/heads/master
       username: ((gitee.username))
       password: ((gitee.password))
+  text_file:
+    alias: 替换pom文件中的基础镜像
+    type: "text_file:1.0.0-python3.8"
+    param:
+      path: ${git_clone.git_path}/api/pom.xml
+      expression: TEXT.replace('jianmudev/openjdk:11.0.11-jdk-oracle-wait-for-it', 'docker.mirror.jianmu.dev/jianmudev/openjdk:11.0.11-jdk-oracle-wait-for-it')
+  replace_pom:
+    alias: 替换pom文件
+    image: alpine:3.13.6
+    environment:
+      tmp_pom: ${text_file.result_path}
+      pom: ${git_clone.git_path}/api/pom.xml
+    script:
+      - mv $TMP_POM $POM
   maven_jib_build:
     type: maven_build:1.3.1-jdk11
     param:
@@ -46,8 +61,8 @@ pipeline:
   deploy_server:
     type: ssh_cmd:1.0.1
     param:
-      ssh_ip: 172.20.148.86
-      ssh_private_key: ((jianmu_ci.server_private_key))
+      ssh_ip: 172.20.149.21
+      ssh_private_key: ((jianmu_ci.server_private_key_dai))
       ssh_cmd: >-
         docker images
         &&
@@ -65,7 +80,7 @@ pipeline:
         &&
         docker-compose rm -vf ci-server
         &&
-        docker rmi ${global.image_name}:$ci_server_version
+        docker rmi ${global.mirror_name}:$ci_server_version
         &&
         cp .env .env.$(date +'%Y-%m-%d_%H:%M:%S')
         &&

@@ -1,6 +1,7 @@
 name: 建木博客测试环境CI/CD
 description: 建木博客测试环境CI/CD
 
+# 触发器
 trigger:
   type: webhook
   param:
@@ -16,6 +17,7 @@ trigger:
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
+  # 触发器执行规则，为true时执行流程
   only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged")
 
 pipeline:
@@ -24,6 +26,8 @@ pipeline:
     param:
       remote_url: https://gitee.com/jianmu-dev/jianmu-blog.git
       ref: refs/heads/master
+
+  # shell节点
   confirm_root:
     image: ubuntu:18.04
     environment:
@@ -33,18 +37,24 @@ pipeline:
       - cat ${CONFIG_FILE_PATH}
       - 'sed -i "s|url: https://blog.jianmu.dev|url: ${REPLACEMENT_CDN}|" ${CONFIG_FILE_PATH}'
       - cat ${CONFIG_FILE_PATH}
+
+  # build节点-将克隆的代码进行build
   node_build:
     type: nodejs_build:1.2.1-16.13.0
     param:
       workspace: ${git_clone.git_path}
+
+  # 更新资源-文件替换
   update_resoure:
     type: scp_resouce:1.1.0
     param:
-      ssh_ip: 172.16.101.253
-      ssh_user: ubuntu
-      ssh_private_key: ((private_key.172_16_101_253))
-      remote_file: /home/ubuntu/jianmu-blog
+      ssh_ip: 172.20.148.16
+      ssh_user: root
+      ssh_private_key: ((private_key.172_20_148_16))
+      remote_file: /root/nginx/html
       local_file: ${git_clone.git_path}/public
+
+      # 信息通知-企业微信通知
   send_message:
     type: qywx_notice:1.2.1
     param:
