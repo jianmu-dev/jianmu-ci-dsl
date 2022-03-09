@@ -62,6 +62,7 @@ pipeline:
     type: ssh_cmd:1.0.1
     param:
       ssh_ip: 172.16.101.220
+      ssh_user: ubuntu
       ssh_private_key: ((jianmu_ci.server_private_key))
       ssh_cmd: >-
         docker images
