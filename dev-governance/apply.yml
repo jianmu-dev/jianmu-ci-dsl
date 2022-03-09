@@ -232,7 +232,7 @@ workflow:
       repeatable: false
       comment_body: |
         感谢您申请加入建木社区。看起来这可能是您第一次对建木开源项目贡献。
-        您需要先签署贡献者许可协议(CLA)。请访问 https://cla.test.jianmu.dev/ 进行签署。
+        您需要先签署贡献者许可协议(CLA)。请访问 https://jianmu.opencla.org/ 进行签署。
         签署后，请在此处回复(例如：我已签署)。谢谢。
 
         需签署CLA邮箱列表：
