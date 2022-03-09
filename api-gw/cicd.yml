@@ -14,7 +14,7 @@ pipeline:
       username: ((gitee.username))
       password: ((gitee.password))
   node_build:
-    type: nodejs_build:1.0.0-14.16.1
+    type: nodejs_build:1.2.1-14.16.1
     param:
       workspace: ${git_clone.git_path}
       registry_url: https://registry.npm.taobao.org
