@@ -50,21 +50,32 @@ workflow:
     sources:
       - start
     targets:
-      - contributors
+      - jsonpath
     param:
       remote_url: ${trigger.clone_url}
+  jsonpath:
+    alias: 提取贡献者昵称
+    sources:
+      - git_clone
+    targets:
+      - contributors
+    type: "jsonpath:1.1.0"
+    param:
+      file: ${git_clone.git_path}/contributors/${trigger.username}.yml
+      expression: "$.name"
+      type: yml
   contributors:
     alias: 构建贡献者列表
     type: contributors_build:1.0.0-gitee
     sources:
-      - git_clone
+      - jsonpath
     targets:
       - git_push
       - sync_contributors_jsonfile
     param:
       json_filepath: ${git_clone.git_path}/data/contributors.json
       username: ${trigger.username}
-      nickname: ${trigger.nickname}
+      nickname: ${jsonpath.result}
       avatar_url: ${trigger.avatar_url}
       pr_url: ${trigger.pr_url}
       email: ${trigger.email}
