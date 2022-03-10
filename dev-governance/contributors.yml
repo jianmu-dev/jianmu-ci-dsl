@@ -45,6 +45,7 @@ workflow:
     targets:
       - git_clone
   git_clone:
+    alias: clone仓库
     type: git_clone:1.2.0
     sources:
       - start
@@ -53,6 +54,7 @@ workflow:
     param:
       remote_url: ${trigger.clone_url}
   contributors:
+    alias: 构建贡献者列表
     type: contributors_build:1.0.0-gitee
     sources:
       - git_clone
@@ -67,6 +69,7 @@ workflow:
       pr_url: ${trigger.pr_url}
       email: ${trigger.email}
   git_push:
+    alias: push贡献者列表
     type: git_push:1.0.3
     sources:
       - contributors
@@ -82,6 +85,7 @@ workflow:
       committer_name: jianmubot
       committer_email: dev@jianmu.dev
   sync_contributors_jsonfile:
+    alias: 同步贡献者列表到服务器
     sources:
       - contributors
     targets:
@@ -94,6 +98,7 @@ workflow:
       local_file: ${contributors.contributors_json_filepath}
 
   condition:
+    alias: 判断用户是退出还是加入
     sources:
       - git_push
       - sync_contributors_jsonfile
@@ -104,6 +109,7 @@ workflow:
       false: member_add
 
   member_add:
+    alias: 将用户加入到组织
     sources:
       - condition
     targets:
@@ -115,15 +121,16 @@ workflow:
       username: ${trigger.username}
 
   send_message:
+    alias: 提醒贡献者已加入
+    type: feishu_notice_post:1.0.2
     sources:
       - member_add
     targets:
       - end
-    type: feishu_notice_interactive:1.0.2
     param:
       bot_webhook_url: ((feishu.webhook_url))
       msg_title: 贡献者已加入
-      msg_text: "昵称：${trigger.nickname}\n用户名：${trigger.username}"
+      msg_text: 贡献者已加入。\n\n昵称：${trigger.nickname}\n用户名：${trigger.username}
   end:
     type: end
     sources:

@@ -45,6 +45,7 @@ groups:
       - /ssl/jianmu.dev/*_cd.yml
       - /ssl/jianmu.dev/*.test_cd.yml
       - /ssl/jianmu.dev/*.internal_cd.yml
+      - /ssl/jianmu.dev/*.mirror_cd.yml
       # opencla.org
       - /ssl/opencla.org/*_cd.yml
       # dghub.cn
@@ -53,6 +54,7 @@ groups:
       - /ssl/jianmuhub.com/@_cd.yml
       - /ssl/jianmuhub.com/*_cd.yml
       - /ssl/jianmuhub.com/*.internal_cd.yml
+      - /ssl/jianmuhub.com/*.test_cd.yml
   - name: CDN SSL证书
     projects:
       # dghub.cn
