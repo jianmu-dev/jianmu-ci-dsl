@@ -19,12 +19,13 @@ trigger:
       type: STRING
       exp: $.body.json.assignee.name
 pipeline:
-  qywx_notice:
-    type: qywx_notice:1.2.0
+  feishu_notice:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      msgtype: news
-      news_title: 天啦噜，Issue状态更新啦啦啦！
-      news_url: ${trigger.issue_url}
-      news_description: "Issue标题: ${trigger.issue_title} \\n Issue类型：${trigger.issue_type} \\n Issue状态：${trigger.issue_status} \\n 负责人：${trigger.assignee} "
-      news_picurl: http://lmg.jj20.com/up/allimg/1112/0HG9115206/1ZHG15206-4-1200.jpg
+      bot_webhook_url: ((feishu.webhook_url))
+      app_id: ((feishu.app_id))
+      app_secret: ((feishu.app_secret))
+      msg_title: 天啦噜，Issue状态更新啦啦啦！
+      msg_text: ""
+      msg_markdown: "Issue标题: [${trigger.issue_title}](${trigger.issue_url}) \nIssue类型：${trigger.issue_type} \nIssue状态：${trigger.issue_status} \n负责人：${trigger.assignee}"
+      image_url: http://lmg.jj20.com/up/allimg/1112/0HG9115206/1ZHG15206-4-1200.jpg

@@ -17,8 +17,9 @@ pipeline:
       image_name: jianmudev/private
       docker_username: ((dockerhub.username))
       docker_password: ((dockerhub.password))
-  send_message:
-    type: qywx_notice:1.2.1-text
+  feishu_notice:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      text_content: "建木dev-tools测试环境更新完成"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 建木dev-tools测试环境更新完成
+      msg_text: "昵称：${trigger.nickname}\n用户名：${trigger.username}\npr链接：${trigger.pull_url}"

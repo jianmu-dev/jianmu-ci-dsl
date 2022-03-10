@@ -96,11 +96,9 @@ pipeline:
         docker ps
         &&
         echo done
-  send_message:
-    type: qywx_notice:1.2.1
+  feishu_notice:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      mentioned_mobile_list: "[]"
-      text_content: "建木CI服务端测试环境更新完成。\\n\\n开发分支：${git_clone.git_branch}\\n版本：${maven_jib_build.version}\\n\\n网址：https://ci.test.jianmu.dev"
-      msgtype: "text"
-      mentioned_list: "[]"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 建木CI服务端测试环境更新完成
+      msg_text: "开发分支：${git_clone.git_branch}\n版本：${maven_jib_build.version}\n\n网址：https://ci.test.jianmu.dev"

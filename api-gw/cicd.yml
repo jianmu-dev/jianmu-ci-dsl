@@ -53,7 +53,8 @@ pipeline:
         &&
         echo done
   send_message:
-    type: qywx_notice:1.2.1-text
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      text_content: "API网关测试环境更新完成。\\n\\n镜像：${global.image_name}:${node_build.package_name}-${node_build.package_version}"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: API网关测试环境更新完成
+      msg_text: "镜像：${global.image_name}:${node_build.package_name}-${node_build.package_version}"
