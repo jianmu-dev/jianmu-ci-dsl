@@ -24,7 +24,7 @@ trigger:
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged" && (${trigger.source_repo_owner_name} == "Ethan" || ${trigger.source_repo_owner_name} == "daihw" || ${trigger.source_repo_owner_name} == "黄熙"))
+  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} == "merged" && (${trigger.source_repo_owner_name} == "Ethan" || ${trigger.source_repo_owner_name} == "daihw" || ${trigger.source_repo_owner_name} == "We can do anything"))
 
 pipeline:
   git_clone:
