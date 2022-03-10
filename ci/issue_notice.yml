@@ -1,0 +1,31 @@
+name: issue通知
+
+trigger:
+  type: webhook
+  param:
+    - name:  issue_title
+      type: STRING
+      exp: $.body.json.issue.title
+    - name:  issue_url
+      type: STRING
+      exp: $.body.json.issue.html_url
+    - name: issue_type
+      type: STRING
+      exp: $.body.json.issue.type_name
+    - name: issue_status
+      type: STRING
+      exp: $.body.json.issue.state_name
+    - name: assignee
+      type: STRING
+      exp: $.body.json.assignee.name
+pipeline:
+  feishu_notice:
+    type: feishu_notice_interactive:1.0.2
+    param:
+      bot_webhook_url: ((feishu.webhook_url))
+      app_id: ((feishu.app_id))
+      app_secret: ((feishu.app_secret))
+      msg_title: 天啦噜，Issue状态更新啦啦啦！
+      msg_text: ""
+      msg_markdown: "Issue标题: [${trigger.issue_title}](${trigger.issue_url}) \nIssue类型：${trigger.issue_type} \nIssue状态：${trigger.issue_status} \n负责人：${trigger.assignee}"
+      image_url: http://lmg.jj20.com/up/allimg/1112/0HG9115206/1ZHG15206-4-1200.jpg
