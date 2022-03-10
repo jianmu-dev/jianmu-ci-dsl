@@ -55,12 +55,10 @@ pipeline:
       remote_file: /root/nginx/html
       local_file: ${git_clone.git_path}/public
 
-      # 信息通知-企业微信通知
+  # 信息通知-飞书通知
   send_message:
-    type: qywx_notice:1.2.1
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      mentioned_mobile_list: "[]"
-      text_content: "建木博客测试环境更新完成\\n\\n版本：${node_build.package_version}\\n\\n网址：https://blog.test.jianmu.dev"
-      msgtype: "text"
-      mentioned_list: "[]"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 建木博客测试环境更新完成
+      msg_text: "版本：${node_build.package_version}\n\n网址：https://blog.test.jianmu.dev"

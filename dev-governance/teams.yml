@@ -64,13 +64,11 @@ workflow:
       - sync_teams_jsonfile
     targets:
       - end
-    type: qywx_notice:1.2.1
-    param:
-      bot_webhook_url: ((charbot.webhook_url))
-      mentioned_mobile_list: "[]"
-      text_content: "团队已同步更新"
-      msgtype: "text"
-      mentioned_list: "[]"
+    type: feishu_notice_interactive:1.0.2
+      param:
+        bot_webhook_url: ((feishu.webhook_url))
+        msg_title: 团队已同步更新
+        msg_text: ""
   end:
     type: end
     sources:
