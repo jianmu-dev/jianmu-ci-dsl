@@ -19,11 +19,9 @@ pipeline:
       ssh_private_key: ((private_key.alixg))
       remote_file: /home/jianmu-docs/v2
       local_file: ${git_clone.git_path}/.vitepress/dist
-  send_message:
-    type: qywx_notice:1.2.1
+  feishu_notice:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      mentioned_mobile_list: "[]"
-      text_content: "建木文档v2更新完成"
-      msgtype: "text"
-      mentioned_list: "[]"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 建木文档v2更新完成
+      msg_text: ""
