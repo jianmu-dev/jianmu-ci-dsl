@@ -8,6 +8,7 @@ groups:
       - /ci/all_ci.yml
       - /ci/server_cd.yml
       - /ci/ui_cd.yml
+      - /ci/issue_notice.yml
   - name: 建木CLA
     projects:
       - /cla/all_ci.yml
