@@ -71,11 +71,9 @@ pipeline:
         docker ps
         &&
         echo done
-  send_message:
-    type: qywx_notice:1.2.1
+  feishu_notice:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      mentioned_mobile_list: "[]"
-      text_content: "建木Hub服务端生产环境更新完成。\\n\\n版本：${git_clone.git_tag}\\n\\n网址：https://hub.jianmu.dev"
-      msgtype: "text"
-      mentioned_list: "[]"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 建木Hub服务端生产环境更新完成
+      msg_text: "版本：${git_clone.git_tag}\n\n网址：https://hub.jianmu.dev"

@@ -51,13 +51,15 @@ pipeline:
       ssh_ip: 47.243.164.48
       remote_file: /home/jianmu-official-site/index.html
       local_file: ${git_clone.git_path}/dist/index.html
-  send_message:
-    type: qywx_notice:1.2.1-text
+  feishu_notice:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      text_content: "建木官网CDN更新完成\\n\\n版本：${git_clone.git_tag}\\n\\n网址：https://jianmu.dev"
-  send_message_ui:
-    type: qywx_notice:1.2.1-text
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 建木官网CDN更新完成
+      msg_text: "版本：${git_clone.git_tag}\n\n网址：https://jianmu.dev"
+  feishu_notice_ui:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.ui_webhook_url))
-      text_content: "建木官网CDN更新完成\\n\\n版本：${git_clone.git_tag}\\n\\n网址：https://jianmu.dev"
+      bot_webhook_url: ((feishu.webhook_url))
+      msg_title: 建木官网CDN更新完成
+      msg_text: "版本：${git_clone.git_tag}\n\n网址：https://jianmu.dev"
