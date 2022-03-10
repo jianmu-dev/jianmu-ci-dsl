@@ -37,10 +37,13 @@ trigger:
     - name: commit_num
       type: NUMBER
       exp: $.body.json.pull_request.commits
+    - name: pr_target_branch
+      type: STRING
+      exp: $.body.json.target_branch
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
-  only: (${trigger.pr_state} === "open")
+  only: (${trigger.pr_target_branch} == "master" && ${trigger.pr_state} === "open")
 
 workflow:
   start:
