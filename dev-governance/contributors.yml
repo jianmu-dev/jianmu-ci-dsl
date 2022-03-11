@@ -50,13 +50,24 @@ workflow:
     sources:
       - start
     targets:
-      - jsonpath
+      - condition1
     param:
       remote_url: ${trigger.clone_url}
+
+  condition1:
+    alias: 判断用户是退出还是加入
+    sources:
+      - git_clone
+    type: condition
+    expression: ${trigger.exit}==0
+    cases:
+      true: contributors
+      false: jsonpath
+
   jsonpath:
     alias: 提取贡献者昵称
     sources:
-      - git_clone
+      - condition1
     targets:
       - contributors
     type: "jsonpath:1.1.0"
@@ -68,6 +79,7 @@ workflow:
     alias: 构建贡献者列表
     type: contributors_build:1.0.0-gitee
     sources:
+      - condition1
       - jsonpath
     targets:
       - git_push
