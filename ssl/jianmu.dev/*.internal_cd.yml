@@ -61,6 +61,7 @@ workflow:
       - scp_key_nexus
     targets:
       - send_message
+      - send_email
     type: ssh_cmd:1.0.1
     param:
       ssh_ip: 172.16.101.232
@@ -97,6 +98,7 @@ workflow:
       - scp_key_internal_env
     targets:
       - send_message
+      - send_email
     type: ssh_cmd:1.0.1
     param:
       ssh_ip: 172.16.101.254
@@ -108,7 +110,7 @@ workflow:
       - restart_nginx_nexus
       - restart_nginx_internal_env
     targets:
-      - send_email
+      - end
     type: feishu_notice_interactive:1.0.2
     param:
       bot_webhook_url: ((feishu.webhook_url))
@@ -116,7 +118,8 @@ workflow:
       msg_text: ""
   send_email:
     sources:
-      - send_message
+      - restart_nginx_nexus
+      - restart_nginx_internal_env
     targets:
       - end
     type: email:1.0.0
@@ -132,3 +135,4 @@ workflow:
     type: end
     sources:
       - send_email
+      - send_message

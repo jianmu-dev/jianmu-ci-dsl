@@ -58,6 +58,7 @@ workflow:
       - scp_key
     targets:
       - send_message
+      - send_email
     type: ssh_cmd:1.0.1
     param:
       ssh_ip: 172.16.101.253
@@ -68,7 +69,7 @@ workflow:
     sources:
       - ssh_cmd
     targets:
-      - send_email
+      - end
     type: qywx_notice:1.2.1
     param:
       bot_webhook_url: ((charbot.webhook_url))
@@ -78,7 +79,7 @@ workflow:
       mentioned_list: "[]"
   send_email:
     sources:
-      - send_message
+      - ssh_cmd
     targets:
       - end
     type: email:1.0.0
@@ -94,3 +95,4 @@ workflow:
     type: end
     sources:
       - send_email
+      - send_message

@@ -56,6 +56,7 @@ workflow:
       - scp_key
     targets:
       - send_message
+      - send_email
     type: ssh_cmd:1.0.1
     param:
       ssh_ip: 47.243.164.48
@@ -65,7 +66,7 @@ workflow:
     sources:
       - ssh_cmd
     targets:
-      - send_email
+      - end
     type: feishu_notice_interactive:1.0.2
     param:
       bot_webhook_url: ((feishu.webhook_url))
@@ -73,7 +74,7 @@ workflow:
       msg_text: ""
   send_email:
     sources:
-      - send_message
+      - ssh_cmd
     targets:
       - end
     type: email:1.0.0
@@ -89,3 +90,4 @@ workflow:
     type: end
     sources:
       - send_email
+      - send_message
