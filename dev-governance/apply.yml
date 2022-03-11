@@ -164,6 +164,7 @@ workflow:
       - pr-merge
     targets:
       - send_message_exit
+      - send_email_exit
     param:
       access_token: ((gitee.jianmubot_token))
       org: ${trigger.org_name}
@@ -179,6 +180,21 @@ workflow:
       bot_webhook_url: ((feishu.webhook_url))
       msg_title: 贡献者退出提示
       msg_text: "贡献者已退出。\n用户名：${trigger.username}"
+
+  send_email_exit:
+    sources:
+      - remove_org
+    targets:
+      - end
+    type: email:1.0.0
+    param:
+      host: smtp.ym.163.com
+      sender: notice@jianmu.dev
+      auth_code: ((email.notice_auth_code))
+      receivers: '["dev@jianmu.dev"]'
+      type: html
+      subject: 贡献者退出提示
+      text: 贡献者已退出。<br/>用户名：${trigger.username}
 
   git_clone:
     alias: clone贡献者提交的pr
@@ -248,6 +264,7 @@ workflow:
       - pr_comment_tips
     targets:
       - send_message_join
+      - send_email_join
     param:
       access_token: ((gitee.jianmubot_token))
       pr_url: ${trigger.pull_url}
@@ -264,10 +281,27 @@ workflow:
       bot_webhook_url: ((feishu.webhook_url))
       msg_title: 贡献者加入提示
       msg_text: "贡献者申请加入。\n用户名：${trigger.username}\npr链接：${trigger.pull_url}"
+
+  send_email_join:
+    sources:
+      - assignee
+    targets:
+      - end
+    type: email:1.0.0
+    param:
+      host: smtp.ym.163.com
+      sender: notice@jianmu.dev
+      auth_code: ((email.notice_auth_code))
+      receivers: '["dev@jianmu.dev"]'
+      type: html
+      subject: 贡献者加入提示
+      text: 贡献者申请加入。<br/>用户名：${trigger.username}<br/>pr链接：${trigger.pull_url}
   end:
     type: end
     sources:
       - send_message_exit
+      - send_email_exit
       - pr_comment_rectify2
       - pr_comment_rectify1
       - send_message_join
+      - send_email_join

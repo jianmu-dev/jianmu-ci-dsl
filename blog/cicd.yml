@@ -72,6 +72,7 @@ workflow:
       - node_build
     targets:
       - send_message
+      - send_email
     param:
       qiniu_bucket: jianmu
       qiniu_ak: ((qiniu.AccessKey))
@@ -114,6 +115,7 @@ workflow:
       - node_build_wrapper
     targets:
       - send_message
+      - send_email
     param:
       qiniu_bucket: jianmu
       qiniu_ak: ((qiniu.AccessKey))
@@ -127,6 +129,7 @@ workflow:
       - node_build_wrapper
     targets:
       - send_message
+      - send_email
     param:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
@@ -138,6 +141,7 @@ workflow:
       - node_build_wrapper
     targets:
       - send_message
+      - send_email
     param:
       ssh_ip: 47.243.164.48
       ssh_private_key: ((private_key.alixg))
@@ -156,7 +160,25 @@ workflow:
       bot_webhook_url: ((feishu.webhook_url))
       msg_title: 建木博客cdn更新完成
       msg_text: "版本：${git_clone.git_tag}\n\n网址：https://blog.jianmu.dev"
+  send_email:
+    sources:
+      - qiniu_upload
+      - qiniu_upload_wrapper
+      - update_index_page
+      - update_rss_file
+    targets:
+      - end
+    type: email:1.0.0
+    param:
+      host: smtp.ym.163.com
+      sender: notice@jianmu.dev
+      auth_code: ((email.notice_auth_code))
+      receivers: '["dev@jianmu.dev"]'
+      type: html
+      subject: 建木博客cdn更新完成:${git_clone.git_tag}
+      text: 建木博客cdn更新完成。<br/>版本：${git_clone.git_tag}<br/><br/>网址：https://blog.jianmu.dev
   end:
     type: end
     sources:
       - send_message
+      - send_email
