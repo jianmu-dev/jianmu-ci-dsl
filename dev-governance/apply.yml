@@ -284,7 +284,7 @@ workflow:
 
   send_email_join:
     sources:
-      - assignee
+      - pr-assignee
     targets:
       - end
     type: email:1.0.0
