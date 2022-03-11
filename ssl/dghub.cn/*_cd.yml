@@ -77,7 +77,7 @@ workflow:
       msg_text: ""
   send_email:
     sources:
-      - send_message
+      - ssh_cmd
     targets:
       - end
     type: email:1.0.0
