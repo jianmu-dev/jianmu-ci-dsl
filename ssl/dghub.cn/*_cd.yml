@@ -68,13 +68,27 @@ workflow:
     sources:
       - ssh_cmd
     targets:
-      - end
+      - send_email
     type: feishu_notice_interactive:1.0.2
     param:
       bot_webhook_url: ((feishu.webhook_url))
       msg_title: 更新ssl证书（${global.domain}）更新完成。
       msg_text: ""
+  send_email:
+    sources:
+      - send_message
+    targets:
+      - end
+    type: email:1.0.0
+    param:
+      host: smtp.ym.163.com
+      sender: notice@jianmu.dev
+      auth_code: ((email.notice_auth_code))
+      receivers: '["dev@jianmu.dev"]'
+      type: html
+      subject: 七牛云ssl证书更新完成:（${global.domain}）
+      text: 七牛云ssl证书（${global.domain}）更新完成。
   end:
     type: end
     sources:
-      - send_message
+      - send_email

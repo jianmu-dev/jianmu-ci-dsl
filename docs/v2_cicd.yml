@@ -25,3 +25,13 @@ pipeline:
       bot_webhook_url: ((feishu.webhook_url))
       msg_title: 建木文档v2更新完成
       msg_text: ""
+  send_email:
+    type: email:1.0.0
+    param:
+      host: smtp.ym.163.com
+      sender: notice@jianmu.dev
+      auth_code: ((email.notice_auth_code))
+      receivers: '["dev@jianmu.dev"]'
+      type: html
+      subject: 建木文档v2更新完成
+      text: 建木文档v2更新完成
