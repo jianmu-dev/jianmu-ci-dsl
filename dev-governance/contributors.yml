@@ -125,6 +125,7 @@ workflow:
       - condition
     targets:
       - send_message
+      - send_email
     type: gitee:1.0.0-member-add
     param:
       access_token: ((gitee.jianmubot_token))
@@ -162,4 +163,5 @@ workflow:
     sources:
       - condition
       - send_email
+      - send_message
 
