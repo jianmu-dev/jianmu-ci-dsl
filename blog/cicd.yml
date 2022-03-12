@@ -101,12 +101,15 @@ workflow:
       - update_rss_file
     environment:
       workspace: ${git_clone_wrapper.git_path}
+      registry_url: https://registry.npm.taobao.org
       jianmu_cdn_base_url: ${global.cdn_base_url}
       jianmu_cdn_index_path: /
       jianmu_cdn_upload_uri_prefix: ${global.package_name}/${git_clone.git_tag}
     script:
       - cd ${WORKSPACE}
       - ls -a
+      - yarn config set registry ${REGISTRY_URL}
+      - yarn config get registry
       - yarn install
       - yarn build --mode cdn
   qiniu_upload_wrapper:
