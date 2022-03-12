@@ -43,15 +43,21 @@ pipeline:
       remote_file: /home/comyan/jianmu-official-site
       # 本地文件所在的文件路径
       local_file: ${git_clone.git_path}/dist
-  send_message:
-    type: qywx_notice:1.2.1-text
+  feishu_notice:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.webhook_url))
-      text_content: "建木官网测试环境更新完成\\n\\n版本：${node_build.package_version}\\n\\n网址：https://portal.test.jianmu.dev"
-      mentioned_mobile_list: '["18881035295", "17772427748"]'
-  send_message_ui:
-    type: qywx_notice:1.2.1-text
+      bot_webhook_url: ((feishu.webhook_url))
+      app_id: ((feishu.app_id))
+      app_secret: ((feishu.app_secret))
+      msg_title: 建木官网测试环境更新完成
+      msg_text: "版本：${node_build.package_version}\n\n网址：https://portal.test.jianmu.dev"
+      msg_at_phone_list: '["18881035295", "17772427748"]'
+  feishu_notice_ui:
+    type: feishu_notice_interactive:1.0.2
     param:
-      bot_webhook_url: ((charbot.ui_webhook_url))
-      text_content: "建木官网测试环境更新完成\\n\\n版本：${node_build.package_version}\\n\\n网址：https://portal.test.jianmu.dev"
-      mentioned_mobile_list: '["18201560161", "18810015728"]'
+      bot_webhook_url: ((feishu.webhook_url))
+      app_id: ((feishu.app_id))
+      app_secret: ((feishu.app_secret))
+      msg_title: 建木官网测试环境更新完成
+      msg_text: "版本：${node_build.package_version}\n\n网址：https://portal.test.jianmu.dev"
+      msg_at_phone_list: '["18201560161", "18810015728"]'
