@@ -50,13 +50,24 @@ workflow:
     sources:
       - start
     targets:
-      - jsonpath
+      - condition1
     param:
       remote_url: ${trigger.clone_url}
+
+  condition1:
+    alias: 判断用户是退出还是加入
+    sources:
+      - git_clone
+    type: condition
+    expression: ${trigger.exit}==0
+    cases:
+      true: contributors
+      false: jsonpath
+
   jsonpath:
     alias: 提取贡献者昵称
     sources:
-      - git_clone
+      - condition1
     targets:
       - contributors
     type: "jsonpath:1.1.0"
@@ -68,6 +79,7 @@ workflow:
     alias: 构建贡献者列表
     type: contributors_build:1.0.0-gitee
     sources:
+      - condition1
       - jsonpath
     targets:
       - git_push
@@ -125,6 +137,7 @@ workflow:
       - condition
     targets:
       - send_message
+      - send_email
     type: gitee:1.0.0-member-add
     param:
       access_token: ((gitee.jianmubot_token))
@@ -142,9 +155,25 @@ workflow:
       bot_webhook_url: ((feishu.webhook_url))
       msg_title: 贡献者已加入
       msg_text: "贡献者已加入。\n用户名：${trigger.username}"
+
+  send_email:
+    sources:
+      - member_add
+    targets:
+      - end
+    type: email:1.0.0
+    param:
+      host: smtp.ym.163.com
+      sender: notice@jianmu.dev
+      auth_code: ((email.notice_auth_code))
+      receivers: '["dev@jianmu.dev"]'
+      type: html
+      subject: 贡献者已加入
+      text: 贡献者已加入。<br/>用户名：${trigger.username}
   end:
     type: end
     sources:
       - condition
+      - send_email
       - send_message
 

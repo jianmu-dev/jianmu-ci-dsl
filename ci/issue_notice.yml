@@ -18,8 +18,17 @@ trigger:
     - name: assignee
       type: STRING
       exp: $.body.json.assignee.name
-pipeline:
+workflow:
+  start:
+    targets:
+      - feishu_notice
+      - send_email
+    type: start
   feishu_notice:
+    sources:
+      - start
+    targets:
+      - end
     type: feishu_notice_interactive:1.0.2
     param:
       bot_webhook_url: ((feishu.webhook_url))
@@ -29,3 +38,22 @@ pipeline:
       msg_text: ""
       msg_markdown: "Issue标题: [${trigger.issue_title}](${trigger.issue_url}) \nIssue类型：${trigger.issue_type} \nIssue状态：${trigger.issue_status} \n负责人：${trigger.assignee}"
       image_url: http://lmg.jj20.com/up/allimg/1112/0HG9115206/1ZHG15206-4-1200.jpg
+  send_email:
+    sources:
+      - start
+    targets:
+      - end
+    type: email:1.0.0
+    param:
+      host: smtp.ym.163.com
+      sender: notice@jianmu.dev
+      auth_code: ((email.notice_auth_code))
+      receivers: '["dev@jianmu.dev"]'
+      type: html
+      subject: 天啦噜，Issue状态更新啦啦啦！
+      text: Issue标题:<a href='${trigger.issue_url}'>${trigger.issue_title}</a> <br/>Issue类型：${trigger.issue_type} <br/>Issue状态：${trigger.issue_status} <br/>负责人：${trigger.assignee}
+  end:
+    sources:
+      - feishu_notice
+      - send_email
+    type: end

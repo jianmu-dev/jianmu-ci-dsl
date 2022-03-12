@@ -52,6 +52,7 @@ workflow:
       - git_clone
     targets:
       - send_message
+      - send_email
     param:
       mvn_action: install
       workspace: ${git_clone.git_path}
@@ -75,6 +76,7 @@ workflow:
       - node_build
     targets:
       - send_message
+      - send_email
     param:
       docker_username: ((dockerhub.username))
       docker_password: ((dockerhub.password))
@@ -94,7 +96,23 @@ workflow:
       bot_webhook_url: ((feishu.webhook_url))
       msg_title: 建木CLA前/后端docker镜像构建完成
       msg_text: "前端：${global.ui_image_name}:${git_clone.git_tag}\n后端：${global.image_name}:${git_clone.git_tag}"
+  send_email:
+    sources:
+      - maven_jib_build
+      - image_build
+    targets:
+      - end
+    type: email:1.0.0
+    param:
+      host: smtp.ym.163.com
+      sender: notice@jianmu.dev
+      auth_code: ((email.notice_auth_code))
+      receivers: '["dev@jianmu.dev"]'
+      type: html
+      subject: 建木CLA前/后端docker镜像构建完成:${git_clone.git_tag}
+      text: 建木CLA前/后端docker镜像构建完成。<br/>前端：${global.ui_image_name}:${git_clone.git_tag}<br/>后端：${global.image_name}:${git_clone.git_tag}
   end:
     type: end
     sources:
+      - send_email
       - send_message
