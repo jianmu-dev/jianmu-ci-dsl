@@ -52,7 +52,8 @@ workflow:
       config_file_path: ${git_clone.git_path}/_config.yml
     script:
       - cat ${CONFIG_FILE_PATH}
-      - 'sed -i "s|url: https://blog.jianmu.dev|url: ${REPLACEMENT_CDN}${REPLACEMENT_ROOT}|" ${CONFIG_FILE_PATH}'
+      # fix: https://gitee.com/jianmu-dev/jianmu-blog/issues/I4SS6M
+#      - 'sed -i "s|url: https://blog.jianmu.dev|url: ${REPLACEMENT_CDN}${REPLACEMENT_ROOT}|" ${CONFIG_FILE_PATH}'
       - 'sed -i "s|root: /|root: ${REPLACEMENT_ROOT}|" ${CONFIG_FILE_PATH}'
       - cat ${CONFIG_FILE_PATH}
   node_build:
