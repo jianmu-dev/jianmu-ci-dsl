@@ -6,7 +6,7 @@ global:
 
 trigger:
   type: cron
-  schedule: 0 0 12 15 * ? *
+  schedule: 0 0 12 18 * ? *
 
 pipeline:
   acme_ssl_aliyun:
