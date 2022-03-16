@@ -1,0 +1,187 @@
+name: prettier前端代码格式化
+description: prettier前端代码格式化
+
+trigger:
+  type: webhook
+  param:
+    # webhook响应头中的token值
+    - name: gitee_token
+      type: SECRET
+      exp: $.header.x-gitee-token
+    # gitee中的webhook钩子事件
+    - name: gitee_event
+      type: STRING
+      exp: $.header.x-gitee-event
+    # 仓库项目名
+    - name: project_name
+      type: STRING
+      exp: $.body.json.project.name
+    # 此次提交pr的地址
+    - name: pr_url
+      type: STRING
+      exp: $.body.json.url
+    # push操作，此次提交的文件修改的信息
+    - name: trigger_data
+      type: STRING
+      exp: $.body.json.commits
+    # webhook返回的分支信息
+    - name: gitee_ref
+      type: STRING
+      exp: $.body.json.ref
+    # webhook返回的当前pr状态
+    - name: pr_state
+      type: STRING
+      exp: $.body.json.state
+    # 提交pr的原分支
+    - name: source_branch
+      type: STRING
+      exp: $.body.json.source_branch
+    # 提交的commit信息
+    - name: commit_message
+      type: STRING
+      exp: $.body.json.commits[0].message
+    # 获取pr操作时的仓库地址
+    - name: pr_repository_url
+      type: STRING
+      exp: $.body.json.source_repo.project.git_http_url
+    # 获取push操作时的仓库地址
+    - name: push_repository_url
+      type: STRING
+      exp: $.body.json.repository.git_http_url
+  # webhook配置密码，会校验token值和在ci上的密钥是否相等
+  auth:
+    token: ${trigger.gitee_token}
+    value: ((gitee.webhook_token))
+  # 条件满足时触发流程
+  only: >
+    (${trigger.gitee_event} == "Merge Request Hook" && ${trigger.pr_state} == "open" || (${trigger.gitee_event} == "Push Hook" && ${trigger.gitee_ref} == "refs/heads/master" && ${trigger.commit_message} != "refactor: auto prettier code"))
+workflow:
+  start:
+    type: start
+    alias: 开始
+    targets:
+      - string_repository_url
+  string_repository_url:
+    type: string:1.0.0-nodejs16.13.1
+    alias: 获取仓库地址
+    sources:
+      - start
+    targets:
+      - git_clone
+    param:
+      expression: >
+        "${trigger.gitee_event}" === "Merge Request Hook" ? "${trigger.pr_repository_url}" : "${trigger.push_repository_url}"
+  git_clone:
+    type: git_clone:1.2.1
+    alias: 克隆项目
+    sources:
+      - string_repository_url
+    targets:
+      - isPushRequest
+    param:
+      remote_url: ${string_repository_url.result}
+      ref: ${trigger.gitee_ref}
+      username: ((gitee.comyan_username))
+      password: ((gitee.comyan_password))
+  isPushRequest:
+    type: condition
+    alias: 是否为push
+    sources:
+      - git_clone
+    expression: ${trigger.gitee_event} == "Push Hook"
+    cases:
+      true: jsonpath
+      false: pr_file_diff
+  jsonpath:
+    type: jsonpath:1.0.0
+    alias: 提取变动的文件路径列表
+    sources:
+      - isPushRequest
+    targets:
+      - string_push
+    param:
+      expression: "$..['modified,added']"
+      data: '${trigger.trigger_data}'
+  string_push:
+    type: string:1.0.0-nodejs16.13.1
+    alias: 构造prettier输入参数
+    sources:
+      - jsonpath
+    targets:
+      - prettier_push
+    param:
+      expression: JSON.stringify(${jsonpath.result}.map(arr=>arr.map(item=>'${git_clone.git_path}'+'/'+item)).flat(2))
+  pr_file_diff:
+    type: gitee:1.0.0-pr-file-diff
+    alias: 提取变动的文件路径列表
+    sources:
+      - isPushRequest
+    targets:
+      - string_pr
+    param:
+      access_token: ((gitee.comyan_git_token))
+      pr_url: ${trigger.pr_url}
+  string_pr:
+    type: string:1.0.0-nodejs16.13.1
+    alias: 构造prettier输入参数
+    sources:
+      - pr_file_diff
+    targets:
+      - prettier_pr
+    param:
+      expression: JSON.stringify(JSON.parse('${pr_file_diff.diff}').map(item => {if (item.status === "added" || item.status === "updated" || item.status === "renamed") {return "${git_clone.git_path}" + "/" + item.filepath}}).filter(item=>item))
+  prettier_push:
+    type: prettier:1.0.0-2.5.1
+    alias: 格式化
+    sources:
+      - string_push
+    targets:
+      - git_push
+    param:
+      files: ${string_push.result}
+  prettier_pr:
+    type: prettier:1.0.0-2.5.1
+    alias: 格式化
+    sources:
+      - string_pr
+    targets:
+      - git_push_pr
+    param:
+      files: ${string_pr.result}
+      config_path: ${git_clone.git_path}/peizhi.js
+  git_push:
+    type: git_push:1.0.2
+    alias: push格式化代码
+    sources:
+      - prettier_push
+    targets:
+      - end
+    param:
+      remote_url: ${string_repository_url.result}
+      remote_branch: ${git_clone.git_branch}
+      username: ((gitee.comyan_username))
+      password: ((gitee.comyan_password))
+      source_path: ${git_clone.git_path}
+      target_dir: ${trigger.project_name}
+      commit_message: "refactor: auto prettier code"
+  git_push_pr:
+    type: git_push:1.0.2
+    alias: push格式化代码
+    sources:
+      - prettier_pr
+    targets:
+      - end
+    param:
+      remote_url: ${string_repository_url.result}
+      remote_branch: ${trigger.source_branch}
+      username: ((gitee.comyan_username))
+      password: ((gitee.comyan_password))
+      source_path: ${git_clone.git_path}
+      target_dir: ${trigger.project_name}
+      commit_message: "refactor: auto prettier code"
+  end:
+    type: end
+    alias: 结束
+    sources:
+      - git_push
+      - git_push_pr
