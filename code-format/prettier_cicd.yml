@@ -148,7 +148,6 @@ workflow:
       - git_push_pr
     param:
       files: ${string_pr.result}
-      config_path: ${git_clone.git_path}/peizhi.js
   git_push:
     type: git_push:1.0.2
     alias: push格式化代码
