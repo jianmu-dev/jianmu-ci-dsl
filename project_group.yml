@@ -26,6 +26,7 @@ groups:
     projects:
       # prettier前端代码格式化
       - /code-format/prettier_cicd.yml
+      - /code-format/prettier_with_fork_cicd.yml
   - name: 建木运营
     projects:
       # 建木官网
