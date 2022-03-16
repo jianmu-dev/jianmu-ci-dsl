@@ -1,4 +1,4 @@
-name: prettier前端代码格式化（自己仓库）
+name: prettier前端代码格式化
 description: prettier前端代码格式化
 
 trigger:
