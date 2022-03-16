@@ -48,6 +48,10 @@ trigger:
     - name: push_repository_url
       type: STRING
       exp: $.body.json.repository.git_http_url
+    # 项目的fullName
+    - name: project_full_name
+      type: STRING
+      exp: $.body.json.project.full_name
   # webhook配置密码，会校验token值和在ci上的密钥是否相等
   auth:
     token: ${trigger.gitee_token}
@@ -114,7 +118,16 @@ workflow:
     targets:
       - prettier_push
     param:
-      expression: JSON.stringify(${jsonpath.result}.map(arr=>arr.map(item=>'${git_clone.git_path}'+'/'+item)).flat(2))
+      expression: >-
+        JSON.stringify(${jsonpath.result}.map(arr=>arr.map(item=>{
+          if(["jianmu-dev/jianmu-ci-server", "jianmu-dev/opencla"].includes("${trigger.project_full_name}")) {
+            if(item.startsWith("ui/")){
+              return "${git_clone.git_path}" + "/" + item
+            }
+          }else{
+            return '${git_clone.git_path}'+'/'+item
+          }
+        })).flat(2))
   pr_file_diff:
     type: gitee:1.0.0-pr-file-diff
     alias: 提取变动的文件路径列表
@@ -133,7 +146,16 @@ workflow:
     targets:
       - prettier_pr
     param:
-      expression: JSON.stringify(JSON.parse('${pr_file_diff.diff}').map(item => {if (item.status === "added" || item.status === "updated" || item.status === "renamed") {return "${git_clone.git_path}" + "/" + item.filepath}}).filter(item=>item))
+      expression: >-
+        JSON.stringify(JSON.parse('${pr_file_diff.diff}').map(item => {
+          if(["jianmu-dev/jianmu-ci-server", "jianmu-dev/opencla"].includes("${trigger.project_full_name}")) {
+              if (item.filepath.startsWith("ui/")) {
+                  return "${git_clone.git_path}" + "/" + item.filepath
+              }
+          } else {
+              return "${git_clone.git_path}" + "/" + item.filepath
+          }
+        }).filter(item=>item))
   prettier_push:
     type: prettier:1.0.0-2.5.1
     alias: 格式化
