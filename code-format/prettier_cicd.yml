@@ -52,13 +52,17 @@ trigger:
     - name: project_full_name
       type: STRING
       exp: $.body.json.project.full_name
+    # pr action
+    - name: pr_action
+      type: STRING
+      exp: $.body.json.action
   # webhook配置密码，会校验token值和在ci上的密钥是否相等
   auth:
     token: ${trigger.gitee_token}
     value: ((gitee.webhook_token))
   # 条件满足时触发流程
   only: >
-    (${trigger.gitee_event} == "Merge Request Hook" && ${trigger.pr_state} == "open" || (${trigger.gitee_event} == "Push Hook" && ${trigger.gitee_ref} == "refs/heads/master" && ${trigger.commit_message} != "refactor: auto prettier code"))
+    (${trigger.gitee_event} == "Merge Request Hook" && ${trigger.pr_state} == "open" && (${trigger.pr_action} == "open" || ${trigger.pr_action} == "update")  || (${trigger.gitee_event} == "Push Hook" && ${trigger.gitee_ref} == "refs/heads/master" && ${trigger.commit_message} != "refactor: auto prettier code"))
 global:
   # 是否启用
   # 默认值为false，表示禁用，此时webhook/cron/手动等操作均无法触发项目并发执行
