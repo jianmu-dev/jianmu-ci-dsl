@@ -199,6 +199,7 @@ workflow:
       - git_push
     param:
       files: ${string_push.result}
+      config_path: ${git_clone.git_path}/.prettierrc.js
   prettier_pr:
     type: prettier:1.0.0-2.5.1
     alias: 格式化
@@ -208,6 +209,7 @@ workflow:
       - git_push_pr
     param:
       files: ${string_pr.result}
+      config_path: ${git_clone.git_path}/.prettierrc.js
   git_push:
     type: git_push:1.0.2
     alias: push格式化代码
