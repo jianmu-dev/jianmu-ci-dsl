@@ -62,7 +62,7 @@ trigger:
     value: ((gitee.webhook_token))
   # 条件满足时触发流程
   only: >
-    (${trigger.gitee_event} == "Merge Request Hook" && ${trigger.pr_state} == "open" && (${trigger.pr_action} == "open" || ${trigger.pr_action} == "update")  || (${trigger.gitee_event} == "Push Hook" && ${trigger.gitee_ref} == "refs/heads/master" && ${trigger.commit_message} != "refactor: auto prettier code"))
+    (${trigger.gitee_event} == "Merge Request Hook" && ${trigger.pr_state} == "open" && (${trigger.pr_action} == "open" || ${trigger.pr_action} == "update")  || (${trigger.gitee_event} == "Push Hook" && ${trigger.gitee_ref} == "refs/heads/master" && ${trigger.commit_message} != "refactor: auto format code"))
 global:
   # 是否启用
   # 默认值为false，表示禁用，此时webhook/cron/手动等操作均无法触发项目并发执行
@@ -73,6 +73,7 @@ workflow:
     alias: 开始
     targets:
       - string_repository_url
+      - string_repository_branch
   string_repository_url:
     type: string:1.0.0-nodejs16.13.1
     alias: 获取仓库地址
@@ -83,16 +84,27 @@ workflow:
     param:
       expression: >
         "${trigger.gitee_event}" === "Merge Request Hook" ? "${trigger.pr_repository_url}" : "${trigger.push_repository_url}"
+  string_repository_branch:
+    type: string:1.0.0-nodejs16.13.1
+    alias: 获取仓库分支
+    sources:
+      - start
+    targets:
+      - git_clone
+    param:
+      expression: >
+        "${trigger.gitee_event}" === "Merge Request Hook" ? "refs/heads/${trigger.source_branch}" : "${trigger.gitee_ref}"
   git_clone:
     type: git_clone:1.2.1
     alias: 克隆项目
     sources:
       - string_repository_url
+      - string_repository_branch
     targets:
       - isPushRequest
     param:
       remote_url: ${string_repository_url.result}
-      ref: ${trigger.gitee_ref}
+      ref: ${string_repository_branch.result}
       username: ((gitee.comyan_username))
       password: ((gitee.comyan_password))
   isPushRequest:
@@ -120,7 +132,7 @@ workflow:
     sources:
       - jsonpath
     targets:
-      - prettier_push
+      - condition_push
     param:
       expression: >-
         JSON.stringify(${jsonpath.result}.map(arr=>arr.map(item=>{
@@ -132,6 +144,15 @@ workflow:
             return '${git_clone.git_path}'+'/'+item
           }
         })).flat(2))
+  condition_push:
+    sources:
+      - string_push
+    alias: 判断文件列表是否为空
+    type: condition
+    expression: ${string_push.result}=="[]"
+    cases:
+      true: end
+      false: prettier_push
   pr_file_diff:
     type: gitee:1.0.0-pr-file-diff
     alias: 提取变动的文件路径列表
@@ -148,7 +169,7 @@ workflow:
     sources:
       - pr_file_diff
     targets:
-      - prettier_pr
+      - condition_pr
     param:
       expression: >-
         JSON.stringify(JSON.parse('${pr_file_diff.diff}').map(item => {
@@ -160,11 +181,20 @@ workflow:
               return "${git_clone.git_path}" + "/" + item.filepath
           }
         }).filter(item=>item))
+  condition_pr:
+    sources:
+      - string_pr
+    alias: 判断文件列表是否为空
+    type: condition
+    expression: ${string_pr.result}=="[]"
+    cases:
+      true: end
+      false: prettier_pr
   prettier_push:
     type: prettier:1.0.0-2.5.1
     alias: 格式化
     sources:
-      - string_push
+      - condition_push
     targets:
       - git_push
     param:
@@ -173,7 +203,7 @@ workflow:
     type: prettier:1.0.0-2.5.1
     alias: 格式化
     sources:
-      - string_pr
+      - condition_pr
     targets:
       - git_push_pr
     param:
@@ -192,7 +222,7 @@ workflow:
       password: ((gitee.comyan_password))
       source_path: ${git_clone.git_path}
       target_dir: ${trigger.project_name}
-      commit_message: "refactor: auto prettier code"
+      commit_message: "refactor: auto format code"
   git_push_pr:
     type: git_push:1.0.2
     alias: push格式化代码
@@ -207,10 +237,12 @@ workflow:
       password: ((gitee.comyan_password))
       source_path: ${git_clone.git_path}
       target_dir: ${trigger.project_name}
-      commit_message: "refactor: auto prettier code"
+      commit_message: "refactor: auto format code"
   end:
     type: end
     alias: 结束
     sources:
       - git_push
       - git_push_pr
+      - condition_push
+      - condition_pr
